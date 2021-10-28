@@ -6,20 +6,19 @@
  * ==================== 
  */
 
-ShowOverlays(Float:time, winner)
+void ShowOverlays(float time, int winner)
 {
-    decl String:overlay[64];
+    char overlay[64];
     if (winner == gZombieTeam)
     {
-        GetConVarString(gCvars[CVAR_OVERLAYS_ZOMBIE], overlay, sizeof(overlay));
+        GetConVarString(gCvars.CVAR_OVERLAYS_ZOMBIE, overlay, sizeof(overlay));
     }
     else if (winner == gHumanTeam)
     {
-        GetConVarString(gCvars[CVAR_OVERLAYS_HUMAN], overlay, sizeof(overlay));
+        GetConVarString(gCvars.CVAR_OVERLAYS_HUMAN, overlay, sizeof(overlay));
     }
         
-    new maxplayers = GetMaxClients();
-    for (new x = 1; x <= maxplayers; x++)
+    for (int x = 1; x <= MaxClients; x++)
     {
         if (!IsClientInGame(x))
             continue;
@@ -30,10 +29,9 @@ ShowOverlays(Float:time, winner)
     CreateTimer(time, KillOverlays);
 }
 
-public Action:KillOverlays(Handle:timer)
+public Action KillOverlays(Handle timer)
 {
-    new maxplayers = GetMaxClients();
-    for (new x = 1; x <= maxplayers; x++)
+    for (int x = 1; x <= MaxClients; x++)
     {
         if (!IsClientInGame(x))
             continue;

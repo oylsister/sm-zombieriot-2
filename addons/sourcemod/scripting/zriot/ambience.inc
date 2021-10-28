@@ -6,20 +6,20 @@
  * ====================
  */
 
-new bool:soundValid = false;
+bool soundValid = false;
 
-new Handle:tAmbience = INVALID_HANDLE;
+Handle tAmbience = INVALID_HANDLE;
 
-LoadAmbienceData()
+void LoadAmbienceData()
 {
-    new bool:ambience = GetConVarBool(gCvars[CVAR_AMBIENCE]);
+    bool ambience = GetConVarBool(gCvars.CVAR_AMBIENCE);
     if (!ambience)
     {
         return;
     }
     
-    decl String:sound[64];
-    GetConVarString(gCvars[CVAR_AMBIENCE_FILE], sound, sizeof(sound));
+    char sound[64];
+    GetConVarString(gCvars.CVAR_AMBIENCE_FILE, sound, sizeof(sound));
     Format(sound, sizeof(sound), "sound/%s", sound);
     
     soundValid = FileExists(sound, true);
@@ -34,7 +34,7 @@ LoadAmbienceData()
     }
 }
 
-RestartAmbience()
+void RestartAmbience()
 {
     if (tAmbience != INVALID_HANDLE)
     {
@@ -44,38 +44,37 @@ RestartAmbience()
     CreateTimer(0.0, AmbienceLoop, _, TIMER_FLAG_NO_MAPCHANGE);
 }
 
-public Action:AmbienceLoop(Handle:timer)
+public Action AmbienceLoop(Handle timer)
 {
-    new bool:ambience = GetConVarBool(gCvars[CVAR_AMBIENCE]);
+    bool ambience = GetConVarBool(gCvars.CVAR_AMBIENCE);
     
     if (!ambience || !soundValid)
     {
         return;
     }
     
-    decl String:sound[64];
-    GetConVarString(gCvars[CVAR_AMBIENCE_FILE], sound, sizeof(sound));
+    char sound[64];
+    GetConVarString(gCvars.CVAR_AMBIENCE_FILE, sound, sizeof(sound));
     
     EmitAmbience(sound);
     
-    new Float:delay = GetConVarFloat(gCvars[CVAR_AMBIENCE_LENGTH]);
+    float delay = GetConVarFloat(gCvars.CVAR_AMBIENCE_LENGTH);
     tAmbience = CreateTimer(delay, AmbienceLoop, _, TIMER_FLAG_NO_MAPCHANGE);
 }
 
-StopAmbience()
+void StopAmbience()
 {
-    new bool:ambience = GetConVarBool(gCvars[CVAR_AMBIENCE]);
+    bool ambience = GetConVarBool(gCvars.CVAR_AMBIENCE);
     
     if (!ambience)
     {
         return;
     }
     
-    decl String:sound[64];
-    GetConVarString(gCvars[CVAR_AMBIENCE_FILE], sound, sizeof(sound));
+    char sound[64];
+    GetConVarString(gCvars.CVAR_AMBIENCE_FILE, sound, sizeof(sound));
     
-    new maxplayers = GetMaxClients();
-    for (new x = 1; x <= maxplayers; x++)
+    for (int x = 1; x <= MaxClients; x++)
     {
         if (!IsClientInGame(x))
         {
@@ -86,12 +85,12 @@ StopAmbience()
     }
 }
 
-EmitAmbience(const String:sound[])
+void EmitAmbience(const char[] sound)
 {
     PrecacheSound(sound);
     
     StopAmbience();
     
-    new Float:volume = GetConVarFloat(gCvars[CVAR_AMBIENCE_VOLUME]);
+    float volume = GetConVarFloat(gCvars.CVAR_AMBIENCE_VOLUME);
     EmitSoundToAll(sound, SOUND_FROM_PLAYER, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, volume, SNDPITCH_NORMAL, -1, NULL_VECTOR, NULL_VECTOR, true, 0.0);
 }

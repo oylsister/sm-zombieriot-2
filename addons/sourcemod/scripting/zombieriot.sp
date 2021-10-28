@@ -15,7 +15,11 @@
 #undef REQUIRE_PLUGIN
 #include <market>
 
-#define VERSION "1.9.1b"
+#define VERSION "2.0.2"
+
+#pragma newdecls required
+
+bool csgo = false;
 
 #include "zriot/zombieriot"
 #include "zriot/global"
@@ -35,24 +39,30 @@
 #include "zriot/commands"
 #include "zriot/event"
 
-public Plugin:myinfo =
+public Plugin myinfo =
 {
     name = "Zombie Riot", 
-    author = "Greyscale", 
+    author = "Greyscale, Oylsister", 
     description = "Humans stick together to fight off zombie attacks", 
     version = VERSION, 
     url = ""
 };
 
-public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
+public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
     CreateGlobals();
     
     return APLRes_Success;
 }
 
-public OnPluginStart()
+public void OnPluginStart()
 {
+    if (GetEngineVersion() != Engine_CSS)
+        csgo = true;
+
+    else
+        csgo = false;
+
     LoadTranslations("common.phrases.txt");
     LoadTranslations("zombieriot.phrases.txt");
     
@@ -87,19 +97,19 @@ public OnPluginStart()
     
     // ======================================================================
     
-    CreateConVar("gs_zombieriot_version", VERSION, "[ZRiot] Current version of this plugin", FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_UNLOGGED|FCVAR_DONTRECORD|FCVAR_REPLICATED|FCVAR_NOTIFY);
+    CreateConVar("gs_zombieriot_version", VERSION, "[ZRiot] Current version of this plugin");
     
     // ======================================================================
     
     ZRiot_PrintToServer("Plugin loaded");
 }
 
-public OnPluginEnd()
+public void OnPluginEnd()
 {
     ZRiotEnd();
 }
 
-public OnLibraryRemoved(const String:name[])
+public void OnLibraryRemoved(const char[] name)
 {
 	if (StrEqual(name, "market"))
 	{
@@ -107,7 +117,7 @@ public OnLibraryRemoved(const String:name[])
 	}
 }
  
-public OnLibraryAdded(const String:name[])
+public void OnLibraryAdded(const char[] name)
 {
 	if (StrEqual(name, "market"))
 	{
@@ -115,7 +125,7 @@ public OnLibraryAdded(const String:name[])
 	}
 }
 
-public OnMapStart()
+public void OnMapStart()
 {
     MapChangeCleanup();
     
@@ -132,7 +142,7 @@ public OnMapStart()
     CheckMapConfig();
 }
 
-public OnConfigsExecuted()
+public void OnConfigsExecuted()
 {
     UpdateTeams();
     
@@ -140,12 +150,12 @@ public OnConfigsExecuted()
     
     LoadAmbienceData();
     
-    decl String:mapconfig[PLATFORM_MAX_PATH];
+    char mapconfig[PLATFORM_MAX_PATH];
     
     GetCurrentMap(mapconfig, sizeof(mapconfig));
     Format(mapconfig, sizeof(mapconfig), "sourcemod/zombieriot/%s.cfg", mapconfig);
     
-    decl String:path[PLATFORM_MAX_PATH];
+    char path[PLATFORM_MAX_PATH];
     Format(path, sizeof(path), "cfg/%s", mapconfig);
     
     if (FileExists(path))
@@ -154,14 +164,14 @@ public OnConfigsExecuted()
     }
 }
 
-public OnClientPutInServer(client)
+public void OnClientPutInServer(int client)
 {
-    new bool:fakeclient = IsFakeClient(client);
+    bool fakeclient = IsFakeClient(client);
     
     InitClientDeathCount(client);
     
-    new deathcount = GetClientDeathCount(client);
-    new deaths_before_zombie = GetDayDeathsBeforeZombie(gDay);
+    int deathcount = GetClientDeathCount(client);
+    int deaths_before_zombie = GetDayDeathsBeforeZombie(gDay);
     
     bZombie[client] = !fakeclient ? ((deaths_before_zombie > 0) && (fakeclient || (deathcount >= deaths_before_zombie))) : true;
     
@@ -179,15 +189,14 @@ public OnClientPutInServer(client)
     FindClientDXLevel(client);
 }
 
-public OnClientDisconnect(client)
+public void OnClientDisconnect(int client)
 {
     if (!IsPlayerHuman(client))
         return;
     
-    new count;
+    int count;
     
-    new maxplayers = GetMaxClients();
-    for (new x = 1; x <= maxplayers; x++)
+    for (int x = 1; x <= MaxClients; x++)
     {
         if (!IsClientInGame(x) || !IsPlayerHuman(x) || GetClientTeam(x) <= CS_TEAM_SPECTATOR)
             continue;
@@ -201,7 +210,7 @@ public OnClientDisconnect(client)
     }
 }
 
-MapChangeCleanup()
+void MapChangeCleanup()
 {
     gDay = 0;
     
@@ -213,9 +222,9 @@ MapChangeCleanup()
     tFreeze = INVALID_HANDLE;
 }
 
-CheckMapConfig()
+void CheckMapConfig()
 {
-    decl String:mapname[64];
+    char mapname[64];
     GetCurrentMap(mapname, sizeof(mapname));
     
     Format(gMapConfig, sizeof(gMapConfig), "%s/%s", gMapConfig, mapname);
@@ -224,7 +233,7 @@ CheckMapConfig()
     LoadDayData(false);
 }
 
-ZRiotEnd()
+void ZRiotEnd()
 {
     TerminateRound(3.0, Game_Commencing);
     
@@ -236,8 +245,7 @@ ZRiotEnd()
     ServerCommand("bot_all_weapons");
     ServerCommand("bot_kick");
     
-    new maxplayers = GetMaxClients();
-    for (new x = 1; x <= maxplayers; x++)
+    for (int x = 1; x <= MaxClients; x++)
     {
         if (!IsClientInGame(x))
         {

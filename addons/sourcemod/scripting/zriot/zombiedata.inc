@@ -6,38 +6,38 @@
  * ==================== 
  */
 
-enum ZRiot_ZombieData
+enum struct ZRiot_ZombieData
 {
-    String:data_name[32],
-    String:data_model[256],
-    String:data_zvision[256],
-    bool:data_override_required,
-    data_health,
-    Float:data_speed,
-    Float:data_gravity,
-    Float:data_jump,
-    data_fov
+    char data_name[32];
+    char data_model[256];
+    char data_zvision[256];
+    bool data_override_required;
+    int data_health;
+    float data_speed;
+    float data_gravity;
+    float data_jump;
+    int data_fov;
 }
 
 #define MAXZOMBIES 25
 
-new String:modelSuffix[8][16] = {".dx80.vtx", ".dx90.vtx", ".mdl", ".phy", ".sw.vtx", ".vvd", ".xbox", ".xbox.vtx"};
+char modelSuffix[8][16] = {".dx80.vtx", ".dx90.vtx", ".mdl", ".phy", ".sw.vtx", ".vvd", ".xbox", ".xbox.vtx"};
 
-new Handle:kvZombies = INVALID_HANDLE;
+Handle kvZombies = INVALID_HANDLE;
 
-new Handle:adtModels = INVALID_HANDLE;
+Handle adtModels = INVALID_HANDLE;
 
-new arrayZombies[MAXZOMBIES][ZRiot_ZombieData];
-new Handle:adtZombies = INVALID_HANDLE;
-new zCount;
+ZRiot_ZombieData arrayZombies[MAXZOMBIES];
+Handle adtZombies = INVALID_HANDLE;
+int zCount;
 
-FileLinesToArray(Handle:array, const Handle:file)
+void FileLinesToArray(Handle array, const Handle files)
 {
     ClearArray(array);
     
-    decl String:line[128];
+    char line[128];
     
-    while(!IsEndOfFile(file) && ReadFileLine(file, line, sizeof(line)))
+    while(!IsEndOfFile(files) && ReadFileLine(files, line, sizeof(line)))
     {
         if (StrContains(line, ";") == -1)
         {
@@ -55,9 +55,9 @@ FileLinesToArray(Handle:array, const Handle:file)
     }
 }
     
-LoadZombieData(bool:defaultconfig)
+void LoadZombieData(bool defaultconfig)
 {
-    decl String:path[PLATFORM_MAX_PATH];
+    char path[PLATFORM_MAX_PATH];
     Format(path, sizeof(path), "%s/zombies.txt", gMapConfig);
     
     if (!defaultconfig && !FileExists(path))
@@ -83,47 +83,47 @@ LoadZombieData(bool:defaultconfig)
         SetFailState("No zombie data defined in \"%s\"", path);
     }
     
-    decl String:name[64];
-    decl String:type[32];
-    decl String:model[256];
-    decl String:zvision[256];
+    char name[64];
+    char type[32];
+    char model[256];
+    char zvision[256];
     
     zCount = 0;
     
     do
     {
         KvGetSectionName(kvZombies, name, sizeof(name));
-        strcopy(arrayZombies[zCount][data_name], 32, name);
+        strcopy(arrayZombies[zCount].data_name, 32, name);
         
         KvGetString(kvZombies, "type", type, sizeof(type));
-        arrayZombies[zCount][data_override_required] = (StrEqual(type, "override_required", false));
+        arrayZombies[zCount].data_override_required = (StrEqual(type, "override_required", false));
         
         KvGetString(kvZombies, "model", model, sizeof(model));
-        strcopy(arrayZombies[zCount][data_model], 256, model);
+        strcopy(arrayZombies[zCount].data_model, 256, model);
         
         KvGetString(kvZombies, "zvision", zvision, sizeof(zvision));
-        strcopy(arrayZombies[zCount][data_zvision], 256, zvision);
+        strcopy(arrayZombies[zCount].data_zvision, 256, zvision);
         
-        arrayZombies[zCount][data_health] = KvGetNum(kvZombies, "health", 500);
+        arrayZombies[zCount].data_health = KvGetNum(kvZombies, "health", 500);
         
-        arrayZombies[zCount][data_speed] = KvGetFloat(kvZombies, "speed", 300.0);
+        arrayZombies[zCount].data_speed = KvGetFloat(kvZombies, "speed", 300.0);
         
-        arrayZombies[zCount][data_gravity] = KvGetFloat(kvZombies, "gravity", 1.0);
+        arrayZombies[zCount].data_gravity = KvGetFloat(kvZombies, "gravity", 1.0);
         
-        arrayZombies[zCount][data_jump] = KvGetFloat(kvZombies, "jump", 1.0);
+        arrayZombies[zCount].data_jump = KvGetFloat(kvZombies, "jump", 1.0);
         
-        arrayZombies[zCount][data_fov] = KvGetNum(kvZombies, "fov", 90);
+        arrayZombies[zCount].data_fov = KvGetNum(kvZombies, "fov", 90);
         
         zCount++;
     } while (KvGotoNextKey(kvZombies));
 }
 
-LoadModelData()
+void LoadModelData()
 {
-    decl String:path[PLATFORM_MAX_PATH];
+    char path[PLATFORM_MAX_PATH];
     BuildPath(Path_SM, path, sizeof(path), "configs/zriot/models.txt");
     
-    new Handle:fileModels = OpenFile(path, "r");
+    Handle fileModels = OpenFile(path, "r");
     
     if (fileModels == INVALID_HANDLE)
     {
@@ -144,13 +144,13 @@ LoadModelData()
         SetFailState("No models listed in models.txt, please add some models then restart");
     }
     
-    decl String:model[256];
-    decl String:modelpath[256];
+    char model[256];
+    char modelpath[256];
     
-    new modelsize = GetArraySize(adtModels);
-    for (new x = 0; x < modelsize; x++)
+    int modelsize = GetArraySize(adtModels);
+    for (int x = 0; x < modelsize; x++)
     {
-        for (new y = 0; y < 8; y++)
+        for (int y = 0; y < 8; y++)
         {
             GetArrayString(adtModels, x, model, sizeof(model));
             Format(modelpath, sizeof(modelpath), "%s%s", model, modelSuffix[y]);
@@ -165,35 +165,35 @@ LoadModelData()
     CloseHandle(fileModels);
 }
 
-LoadDownloadData()
+void LoadDownloadData()
 {
-    decl String:path[PLATFORM_MAX_PATH];
+    char path[PLATFORM_MAX_PATH];
     BuildPath(Path_SM, path, sizeof(path), "configs/zriot/downloads.txt");
     
-    new Handle:fileDownloads = OpenFile(path, "r");
+    Handle fileDownloads = OpenFile(path, "r");
     
     if (fileDownloads == INVALID_HANDLE)
     {
         SetFailState("\"%s\" missing from server", path);
     }
     
-    new Handle:arrayDownloads = CreateArray(256, 0);
+    Handle arrayDownloads = CreateArray(256, 0);
     
     FileLinesToArray(arrayDownloads, fileDownloads);
     
-    decl String:file[256];
+    char files[256];
     
-    new downloadsize = GetArraySize(arrayDownloads);
-    for (new x = 0; x < downloadsize; x++)
+    int downloadsize = GetArraySize(arrayDownloads);
+    for (int x = 0; x < downloadsize; x++)
     {
-        GetArrayString(arrayDownloads, x, file, sizeof(file));
-        if (FileExists(file))
+        GetArrayString(arrayDownloads, x, files, sizeof(files));
+        if (FileExists(files))
         {
-            AddFileToDownloadsTable(file);
+            AddFileToDownloadsTable(files);
         }
         else
         {
-            ZRiot_LogMessage("File load failed", file);
+            ZRiot_LogMessage("File load failed", files);
         }
     }
   
@@ -201,11 +201,11 @@ LoadDownloadData()
     CloseHandle(arrayDownloads);
 }
 
-FindZombieIDByName(const String:name[])
+int FindZombieIDByName(const char[] name)
 {
-    for (new x = 0; x < zCount; x++)
+    for (int x = 0; x < zCount; x++)
     {
-        if (StrEqual(name, arrayZombies[x][data_name], false))
+        if (StrEqual(name, arrayZombies[x].data_name, false))
         {
             return x;
         }
@@ -214,7 +214,7 @@ FindZombieIDByName(const String:name[])
     return -1;
 }
 
-bool:IsValidZombieID(zombieid)
+bool IsValidZombieID(int zombieid)
 {
     if (zombieid > -1 && zombieid < zCount)
     {
@@ -224,74 +224,74 @@ bool:IsValidZombieID(zombieid)
     return false;
 }
 
-bool:IsOverrideRequired(zombieid)
+bool IsOverrideRequired(int zombieid)
 {
     if (IsValidZombieID(zombieid))
     {
-        return arrayZombies[zombieid][data_override_required];
+        return arrayZombies[zombieid].data_override_required;
     }
     
     return false;
 }
 
-ApplyZombieModel(client, zombieid)
+void ApplyZombieModel(int client, int zombieid)
 {
     if (IsValidZombieID(zombieid))
     {
-        decl String:model[256];
-        strcopy(model, sizeof(model), arrayZombies[zombieid][data_model]);
+        char model[256];
+        strcopy(model, sizeof(model), arrayZombies[zombieid].data_model);
         
         PrecacheModel(model);
         SetEntityModel(client, model);
     }
 }
 
-GetZombieZVision(zombieid, String:zvision[], maxlen)
+void GetZombieZVision(int zombieid, char[] zvision, int maxlen)
 {
     if (IsValidZombieID(zombieid))
     {
-        strcopy(zvision, maxlen, arrayZombies[zombieid][data_zvision]);
+        strcopy(zvision, maxlen, arrayZombies[zombieid].data_zvision);
     }
 }
 
-ApplyZombieHealth(client, zombieid)
+void ApplyZombieHealth(int client, int zombieid)
 {
     if (IsValidZombieID(zombieid))
     {
-        SetEntityHealth(client, arrayZombies[zombieid][data_health]);
+        SetEntityHealth(client, arrayZombies[zombieid].data_health);
     }
 }
 
-ApplyZombieSpeed(client, zombieid)
+void ApplyZombieSpeed(int client, int zombieid)
 {
     if (IsValidZombieID(zombieid))
     {
-        SetPlayerSpeed(client, arrayZombies[zombieid][data_speed]);
+        SetPlayerSpeed(client, arrayZombies[zombieid].data_speed);
     }
 }
 
-ApplyZombieGravity(client, zombieid)
+void ApplyZombieGravity(int client, int zombieid)
 {
     if (IsValidZombieID(zombieid))
     {
-        SetEntityGravity(client, arrayZombies[zombieid][data_gravity]);
+        SetEntityGravity(client, arrayZombies[zombieid].data_gravity);
     }
 }
 
-Float:GetZombieJump(zombieid)
+float GetZombieJump(int zombieid)
 {
     if (IsValidZombieID(zombieid))
     {
-        return arrayZombies[zombieid][data_jump];
+        return arrayZombies[zombieid].data_jump;
     }
     
     return 0.0;
 }
 
-ApplyZombieFOV(client, zombieid)
+void ApplyZombieFOV(int client, int zombieid)
 {
     if (IsValidZombieID(zombieid))
     {
-        SetPlayerFOV(client, arrayZombies[zombieid][data_fov]);
+        SetPlayerFOV(client, arrayZombies[zombieid].data_fov);
     }
 }

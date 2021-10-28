@@ -11,32 +11,32 @@
 #define JOINTEAM_T 2
 #define JOINTEAM_CT 3
 
-InitTeamControl()
+void InitTeamControl()
 {
     RegConsoleCmd("jointeam", Command_JoinTeam);
     RegConsoleCmd("kill", Command_Kill);
     RegConsoleCmd("spectate", Command_Spectate);
 }
 
-public Action:Command_JoinTeam(client, argc)
+public Action Command_JoinTeam(int client, int argc)
 {
     if (!client)
     {
         return Plugin_Continue;
     }
     
-    new bool:enabled = GetConVarBool(gCvars[CVAR_ENABLE]);
+    bool enabled = GetConVarBool(gCvars.CVAR_ENABLE);
     if (!enabled)
     {
         return Plugin_Continue;
     }
     
-    decl String:args[8];
+    char args[8];
     GetCmdArgString(args, sizeof(args));
     
-    new jointeam = StringToInt(args);
+    int jointeam = StringToInt(args);
     
-    new team = GetClientTeam(client);
+    int team = GetClientTeam(client);
     if (team == CS_TEAM_T || team == CS_TEAM_CT)
     {
         if (jointeam != JOINTEAM_SPECTATOR)
@@ -52,14 +52,14 @@ public Action:Command_JoinTeam(client, argc)
     return Plugin_Continue;
 }
 
-public Action:Command_Kill(client, argc)
+public Action Command_Kill(int client, int argc)
 {
     if (!client)
     {
         return Plugin_Continue;
     }
     
-    new bool:enabled = GetConVarBool(gCvars[CVAR_ENABLE]);
+    bool enabled = GetConVarBool(gCvars.CVAR_ENABLE);
     if (!enabled)
     {
         return Plugin_Continue;
@@ -70,14 +70,14 @@ public Action:Command_Kill(client, argc)
     return Plugin_Handled;
 }
 
-public Action:Command_Spectate(client, argc)
+public Action Command_Spectate(int client, int argc)
 {
     if (!client || !IsPlayerAlive(client))
     {
         return Plugin_Continue;
     }
     
-    new bool:enabled = GetConVarBool(gCvars[CVAR_ENABLE]);
+    bool enabled = GetConVarBool(gCvars.CVAR_ENABLE);
     if (!enabled)
     {
         return Plugin_Continue;
@@ -88,10 +88,10 @@ public Action:Command_Spectate(client, argc)
     return Plugin_Continue;
 }
 
-UpdateTeams()
+void UpdateTeams()
 {
-    decl String:zombieteam[8];
-    GetConVarString(gCvars[CVAR_ZOMBIETEAM], zombieteam, sizeof(zombieteam));
+    char zombieteam[8];
+    GetConVarString(gCvars.CVAR_ZOMBIETEAM, zombieteam, sizeof(zombieteam));
     
     if (StrEqual(zombieteam, "t", false))
     {
@@ -112,10 +112,9 @@ UpdateTeams()
     AssignTeamAll(true);
 }
 
-ResetZombies(bool:switchteam)
+void ResetZombies(bool switchteam)
 {
-    new maxplayers = GetMaxClients();
-    for (new x = 1; x <= maxplayers; x++)
+    for (int x = 1; x <= MaxClients; x++)
     {
         if (!IsClientInGame(x))
         {
@@ -131,21 +130,21 @@ ResetZombies(bool:switchteam)
     }
 }
 
-public Action:AssignTeamTimer(Handle:timer)
+public Action AssignTeamTimer(Handle timer)
 {
     AssignTeamAll(false);
 }
 
-AssignTeam(clients[], numClients, bool:spawn)
+void AssignTeam(int[] clients, int numClients, bool spawn)
 {
-    for (new x = 0; x < numClients; x++)
+    for (int x = 0; x < numClients; x++)
     {
         if (!IsClientInGame(clients[x]))
         {
             continue;
         }
         
-        new team = GetClientTeam(clients[x]);
+        int team = GetClientTeam(clients[x]);
         
         if (IsPlayerZombie(clients[x]))
         {
@@ -168,27 +167,25 @@ AssignTeam(clients[], numClients, bool:spawn)
     }
 }
 
-stock AssignTeamClient(client, bool:spawn)
+stock void AssignTeamClient(int client, bool spawn)
 {
     if (!IsClientInGame(client))
     {
         return;
     }
     
-    new clients[1];
+    int clients[1];
     clients[0] = client;
     
     AssignTeam(clients, 1, spawn);
 }
 
-stock AssignTeamAll(bool:spawn)
+stock void AssignTeamAll(bool spawn)
 {
-    new maxplayers = GetMaxClients();
+    int clients[64];
+    int count = 0;
     
-    new clients[maxplayers];
-    new count = 0;
-    
-    for (new x = 1; x <= maxplayers; x++)
+    for (int x = 1; x <= MaxClients; x++)
     {
         if (!IsClientInGame(x) || GetClientTeam(x) < CS_TEAM_T)
         {

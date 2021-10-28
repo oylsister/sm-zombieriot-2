@@ -6,29 +6,29 @@
  * ====================
  */
 
-enum ZRiot_DayData
+enum struct ZRiot_DayData
 {
-    String:data_display[32],
-    String:data_zombieoverride[32*MAXZOMBIES],
-    String:data_storyline[192],
-    data_count,
-    data_healthboost,
-    bool:data_respawn,
-    data_deaths_before_zombie,
-    Float:data_fademin,
-    Float:data_fademax
+    char data_display[32];
+    char data_zombieoverride[32*MAXZOMBIES];
+    char data_storyline[192];
+    int data_count;
+    int data_healthboost;
+    bool data_respawn;
+    char data_deaths_before_zombie;
+    float data_fademin;
+    float data_fademax;
 }
 
 #define MAXDAYS 25
 
-new Handle:kvDays = INVALID_HANDLE;
+Handle kvDays = INVALID_HANDLE;
 
-new arrayDays[MAXDAYS][ZRiot_DayData];
-new dCount;
+ZRiot_DayData arrayDays[MAXDAYS];
+int dCount;
 
-LoadDayData(bool:defaultconfig)
+void LoadDayData(bool defaultconfig)
 {
-    decl String:path[PLATFORM_MAX_PATH];
+    char path[PLATFORM_MAX_PATH];
     Format(path, sizeof(path), "%s/days.txt", gMapConfig);
     
     if (!defaultconfig && !FileExists(path))
@@ -55,39 +55,39 @@ LoadDayData(bool:defaultconfig)
         SetFailState("No day data defined in \"%s\"", path);
     }
     
-    decl String:display[32];
-    decl String:zombieoverride[32*MAXZOMBIES];
-    decl String:storyline[192];
+    char display[32];
+    char zombieoverride[32*MAXZOMBIES];
+    char storyline[192];
     
     dCount = 0;
     do
     {
         KvGetSectionName(kvDays, display, sizeof(display));
-        strcopy(arrayDays[dCount][data_display], 32, display);
+        strcopy(arrayDays[dCount].data_display, 32, display);
         
         KvGetString(kvDays, "zombieoverride", zombieoverride, sizeof(zombieoverride));
-        strcopy(arrayDays[dCount][data_zombieoverride], 32*MAXZOMBIES, zombieoverride);
+        strcopy(arrayDays[dCount].data_zombieoverride, 32*MAXZOMBIES, zombieoverride);
         
         KvGetString(kvDays, "storyline", storyline, sizeof(storyline));
-        strcopy(arrayDays[dCount][data_storyline], 192, storyline);
+        strcopy(arrayDays[dCount].data_storyline, 192, storyline);
         
-        arrayDays[dCount][data_count] = KvGetNum(kvDays, "count", 25);
-        arrayDays[dCount][data_healthboost] = KvGetNum(kvDays, "healthboost");
-        arrayDays[dCount][data_respawn] = bool:KvGetNum(kvDays, "respawn");
-        arrayDays[dCount][data_deaths_before_zombie] = KvGetNum(kvDays, "deaths_before_zombie");
-        arrayDays[dCount][data_fademin] = KvGetFloat(kvDays, "fademin");
-        arrayDays[dCount][data_fademax] = KvGetFloat(kvDays, "fademax");
+        arrayDays[dCount].data_count = KvGetNum(kvDays, "count", 25);
+        arrayDays[dCount].data_healthboost = KvGetNum(kvDays, "healthboost");
+        arrayDays[dCount].data_respawn = view_as<bool>(KvGetNum(kvDays, "respawn"));
+        arrayDays[dCount].data_deaths_before_zombie = KvGetNum(kvDays, "deaths_before_zombie");
+        arrayDays[dCount].data_fademin = KvGetFloat(kvDays, "fademin");
+        arrayDays[dCount].data_fademax = KvGetFloat(kvDays, "fademax");
         
         dCount++;
     } while (KvGotoNextKey(kvDays));
 }
 
-GetDayDisplay(day, String:display[], len)
+void GetDayDisplay(int day, char[] display, int len)
 {
-    strcopy(display, len, arrayDays[day][data_display]);
+    strcopy(display, len, arrayDays[day].data_display);
 }
 
-bool:ExplodeZombieOverrides(day)
+bool ExplodeZombieOverrides(int day)
 {
     if (adtZombies != INVALID_HANDLE)
     {
@@ -95,23 +95,23 @@ bool:ExplodeZombieOverrides(day)
         adtZombies = INVALID_HANDLE;
     }
     
-    decl String:zombieoverride[32*MAXZOMBIES];
+    char zombieoverride[32*MAXZOMBIES];
     GetDayZombieOverride(day, zombieoverride, sizeof(zombieoverride));
     
     if (zombieoverride[0])
     {
         adtZombies = CreateArray();
         
-        new String:sZombies[MAXZOMBIES][64];
+        char sZombies[MAXZOMBIES][64];
         ExplodeString(zombieoverride, ",", sZombies, MAXZOMBIES, 64);
         
-        for (new x = 0; x < MAXZOMBIES; x++)
+        for (int x = 0; x < MAXZOMBIES; x++)
         {
             if (!sZombies[x][0])
                 continue;
             
             TrimString(sZombies[x]);
-            new zombieid = FindZombieIDByName(sZombies[x]);
+            int zombieid = FindZombieIDByName(sZombies[x]);
             
             if (zombieid == -1)
                 continue;
@@ -125,55 +125,55 @@ bool:ExplodeZombieOverrides(day)
     return false;
 }
 
-GetDayZombieOverride(day, String:zombieoverride[], len)
+void GetDayZombieOverride(int day, char[] zombieoverride, int len)
 {
-    strcopy(zombieoverride, len, arrayDays[day][data_zombieoverride]);
+    strcopy(zombieoverride, len, arrayDays[day].data_zombieoverride);
 }
 
-GetDayStoryLine(day, String:storyline[], len)
+void GetDayStoryLine(int day, char[] storyline, int len)
 {
-    strcopy(storyline, len, arrayDays[day][data_storyline]);
+    strcopy(storyline, len, arrayDays[day].data_storyline);
 }
 
-GetDayCount(day)
+int GetDayCount(int day)
 {
-    return arrayDays[day][data_count];
+    return arrayDays[day].data_count;
 }
 
-GetDayHealthBoost(day)
+int GetDayHealthBoost(int day)
 {
-    return arrayDays[day][data_healthboost];
+    return arrayDays[day].data_healthboost;
 }
 
-bool:GetDayRespawn(day)
+bool GetDayRespawn(int day)
 {
-    return arrayDays[day][data_respawn];
+    return arrayDays[day].data_respawn;
 }
 
-GetDayDeathsBeforeZombie(day)
+int GetDayDeathsBeforeZombie(int day)
 {
-    return arrayDays[day][data_deaths_before_zombie];
+    return arrayDays[day].data_deaths_before_zombie;
 }
 
-Float:GetDayMinFade(day)
+float GetDayMinFade(int day)
 {
-    return arrayDays[day][data_fademin];
+    return arrayDays[day].data_fademin;
 }
 
-Float:GetDayMaxFade(day)
+float GetDayMaxFade(int day)
 {
-    return arrayDays[day][data_fademax];
+    return arrayDays[day].data_fademax;
 }
 
-BeginDay()
+void BeginDay()
 {
     gZombiesKilled = 0;
     
-    new zombiecount = GetDayCount(gDay);
-    new zombiemax = GetConVarInt(gCvars[CVAR_ZOMBIEMAX]);
+    int zombiecount = GetDayCount(gDay);
+    int zombiemax = GetConVarInt(gCvars.CVAR_ZOMBIEMAX);
     
-    new spawncount;
-    new bool:respawn = GetDayRespawn(gDay);
+    int spawncount;
+    bool respawn = GetDayRespawn(gDay);
     
     if (respawn)
     {
@@ -186,13 +186,12 @@ BeginDay()
     
     ServerCommand("bot_quota %d", spawncount);
     
-    decl String:display[32];
+    char display[32];
     GetDayDisplay(gDay, display, sizeof(display));
     
-    new bool:override = ExplodeZombieOverrides(gDay);
+    bool override = ExplodeZombieOverrides(gDay);
     
-    new maxplayers = GetMaxClients();
-    for (new x = 1; x <= maxplayers; x++)
+    for (int x = 1; x <= MaxClients; x++)
     {
         if (!IsClientInGame(x))
         {
@@ -208,10 +207,10 @@ BeginDay()
         
         if (override)
         {
-            new size = GetArraySize(adtZombies);
+            int size = GetArraySize(adtZombies);
             if (size)
             {
-                new zombieid = GetRandomInt(0, size - 1);
+                int zombieid = GetRandomInt(0, size - 1);
                             
                 Zombify(x, GetArrayCell(adtZombies, zombieid));
             }

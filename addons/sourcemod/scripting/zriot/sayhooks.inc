@@ -6,21 +6,21 @@
  * ====================
  */
 
-HookChatCmds()
+void HookChatCmds()
 {
     RegConsoleCmd("say", SayCommand);
     RegConsoleCmd("say_team", SayCommand);
 }
 
-public Action:SayCommand(client, argc)
+public Action SayCommand(int client, int argc)
 {
-    new bool:enabled = GetConVarBool(gCvars[CVAR_ENABLE]);
+    bool enabled = GetConVarBool(gCvars.CVAR_ENABLE);
     if (!client || !enabled)
     {
         return Plugin_Continue;
     }
     
-    decl String:args[192];
+    char args[192];
     
     GetCmdArgString(args, sizeof(args));
     ReplaceString(args, sizeof(args), "\"", "");
@@ -34,7 +34,7 @@ public Action:SayCommand(client, argc)
     return Plugin_Continue;
 }
 
-Market(client)
+void Market(int client)
 {
     if (!market)
     {
@@ -43,7 +43,7 @@ Market(client)
         return;
     }
     
-    new bool:buyzone = GetConVarBool(gCvars[CVAR_ZMARKET_BUYZONE]); 
+    bool buyzone = GetConVarBool(gCvars.CVAR_ZMARKET_BUYZONE); 
     if (!IsClientInBuyZone(client) && buyzone)
     {
         ZRiot_PrintCenterText(client, "Market out of buyzone");
@@ -53,8 +53,8 @@ Market(client)
     
     SetGlobalTransTarget(client);
     
-    decl String:title[64];
-    decl String:rebuy[64];
+    char title[64];
+    char rebuy[64];
     
     Format(title, sizeof(title), "%t\n ", "Market title");
     Format(rebuy, sizeof(rebuy), "%t\n ", "Market rebuy");
@@ -62,7 +62,7 @@ Market(client)
     Market_Send(client, title, rebuy);
 }
 
-public bool:Market_OnWeaponSelected(client, String:weaponid[])
+public bool Market_OnWeaponSelected(int client, char[] weaponid)
 {
     if (!weaponid[0] || !IsPlayerAlive(client))
     {
@@ -81,9 +81,9 @@ public bool:Market_OnWeaponSelected(client, String:weaponid[])
         return true;
     }
     
-    decl String:display[64];
-    decl String:weapon[32];
-    new price;
+    char display[64];
+    char weapon[32];
+    int price;
     
     if (!Market_GetWeaponIDInfo(weaponid, display, weapon, price))
     {
@@ -102,7 +102,7 @@ public bool:Market_OnWeaponSelected(client, String:weaponid[])
     return true;
 }
 
-public Market_PostOnWeaponSelected(client, &bool:allowed)
+public int Market_PostOnWeaponSelected(int client, bool &allowed)
 {
     if (!allowed)
     {

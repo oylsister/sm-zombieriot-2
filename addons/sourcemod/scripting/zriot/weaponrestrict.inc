@@ -6,7 +6,7 @@
  * ====================
  */
 
-new Handle:restrictedWeapons = INVALID_HANDLE;
+Handle restrictedWeapons = INVALID_HANDLE;
 
 enum WepRestrictQuery
 {
@@ -15,21 +15,21 @@ enum WepRestrictQuery
     Existing,  /** Already restricted */
 }
     
-InitWeaponRestrict()
+void InitWeaponRestrict()
 {
     RegConsoleCmd("buy", BuyHook);
     
     restrictedWeapons = CreateArray(32, 0);
 }
 
-ClientHookUse(client)
+void ClientHookUse(int client)
 {
 	SDKHook(client, SDKHook_WeaponCanUse, Weapon_CanUse);
 }
 
-public Action:BuyHook(client, argc)
+public Action BuyHook(int client, int argc)
 {
-    new bool:enabled = GetConVarBool(gCvars[CVAR_ENABLE]);
+    bool enabled = GetConVarBool(gCvars.CVAR_ENABLE);
     if (!enabled)
     {
         return Plugin_Continue;
@@ -42,7 +42,7 @@ public Action:BuyHook(client, argc)
         return Plugin_Handled;
     }
     
-    decl String:weapon[64];
+    char weapon[64];
     GetCmdArg(1, weapon, sizeof(weapon));
     
     ReplaceString(weapon, sizeof(weapon), "weapon_", "");
@@ -56,7 +56,7 @@ public Action:BuyHook(client, argc)
     return Plugin_Continue;
 }
 
-WepRestrictQuery:RestrictWeapon(const String:weapon[])
+WepRestrictQuery RestrictWeapon(const char[] weapon)
 {
     if (IsWeaponGroup(weapon))
     {
@@ -79,7 +79,7 @@ WepRestrictQuery:RestrictWeapon(const String:weapon[])
     return Existing;
 }
 
-RestrictWeaponGroup(const String:group[])
+void RestrictWeaponGroup(const char[] group)
 {
     if (StrEqual(group, "pistols", false))
     {
@@ -121,7 +121,7 @@ RestrictWeaponGroup(const String:group[])
     }
 }
     
-WepRestrictQuery:UnRestrictWeapon(const String:weapon[])
+WepRestrictQuery UnRestrictWeapon(const char[] weapon)
 {
     if (IsWeaponGroup(weapon))
     {
@@ -132,7 +132,7 @@ WepRestrictQuery:UnRestrictWeapon(const String:weapon[])
         return Successful;
     }
     
-    new index = GetRestrictedWeaponIndex(weapon);
+    int index = GetRestrictedWeaponIndex(weapon);
     
     if (index > -1)
     {
@@ -146,7 +146,7 @@ WepRestrictQuery:UnRestrictWeapon(const String:weapon[])
     return Invalid;
 }
 
-UnRestrictWeaponGroup(const String:group[])
+void UnRestrictWeaponGroup(const char[] group)
 {
     if (StrEqual(group, "pistols", false))
     {
@@ -188,11 +188,11 @@ UnRestrictWeaponGroup(const String:group[])
     }
 }
 
-bool:IsWeaponRestricted(const String:weapon[])
+bool IsWeaponRestricted(const char[] weapon)
 {
-    for (new x = 0; x < GetArraySize(restrictedWeapons); x++)
+    for (int x = 0; x < GetArraySize(restrictedWeapons); x++)
     {
-        decl String:restrictedweapon[32];
+        char restrictedweapon[32];
         GetArrayString(restrictedWeapons, x, restrictedweapon, sizeof(restrictedweapon));
         
         if (StrEqual(weapon, restrictedweapon, false))
@@ -204,11 +204,11 @@ bool:IsWeaponRestricted(const String:weapon[])
     return false;
 }
 
-GetRestrictedWeaponIndex(const String:weapon[])
+int GetRestrictedWeaponIndex(const char[] weapon)
 {
-    for (new x = 0; x < GetArraySize(restrictedWeapons); x++)
+    for (int x = 0; x < GetArraySize(restrictedWeapons); x++)
     {
-        decl String:restrictedweapon[32];
+        char restrictedweapon[32];
         GetArrayString(restrictedWeapons, x, restrictedweapon, sizeof(restrictedweapon));
         ReplaceString(restrictedweapon, sizeof(restrictedweapon), "weapon_", "");
         
@@ -221,20 +221,20 @@ GetRestrictedWeaponIndex(const String:weapon[])
     return -1;
 }
 
-bool:IsWeaponGroup(const String:weapon[])
+bool IsWeaponGroup(const char[] weapon)
 {
   return (StrEqual(weapon, "pistols", false) || StrEqual(weapon, "shotguns", false) || StrEqual(weapon, "smgs", false) || StrEqual(weapon, "rifles", false) || StrEqual(weapon, "snipers", false));
 }
 
-public Action:Weapon_CanUse(client, weapon)
+public Action Weapon_CanUse(int client, int weapon)
 {
-    new bool:enabled = GetConVarBool(gCvars[CVAR_ENABLE]);
+    bool enabled = GetConVarBool(gCvars.CVAR_ENABLE);
     if (!enabled)
     {
         return Plugin_Continue;
     }
         
-    new String:weaponname[32];
+    char weaponname[32];
     if (!weapon || !GetEdictClassname(weapon, weaponname, sizeof(weaponname)))
     {
         return Plugin_Continue;
@@ -242,7 +242,7 @@ public Action:Weapon_CanUse(client, weapon)
     
     ReplaceString(weaponname, sizeof(weaponname), "weapon_", "");
     
-    decl String:model[256];
+    char model[256];
     GetClientModel(client, model, sizeof(model));
     
     ReplaceString(model, sizeof(model), ".mdl", "");
@@ -270,7 +270,7 @@ public Action:Weapon_CanUse(client, weapon)
     return Plugin_Continue;
 }
 
-public Action:RemoveSpawnWeapon(Handle:timer, any:weapon)
+public Action RemoveSpawnWeapon(Handle timer, any weapon)
 {
     if (IsValidEdict(weapon))
     {

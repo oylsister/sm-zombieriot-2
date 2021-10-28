@@ -6,7 +6,7 @@
  * ====================
  */
 
-HookEvents()
+void HookEvents()
 {
     HookEvent("player_connect", PlayerConnect, EventHookMode_Pre);
     HookEvent("player_disconnect", PlayerDisconnect, EventHookMode_Pre);
@@ -21,7 +21,7 @@ HookEvents()
     HookEvent("player_jump", PlayerJump);
 }
 
-UnhookEvents()
+void UnhookEvents()
 {
     UnhookEvent("player_connect", PlayerConnect, EventHookMode_Pre);
     UnhookEvent("player_disconnect", PlayerDisconnect, EventHookMode_Pre);
@@ -36,24 +36,24 @@ UnhookEvents()
     UnhookEvent("player_jump", PlayerJump);
 }
 
-new bool:pcFire = true;
-public Action:PlayerConnect(Handle:event, const String:name[], bool:dontBroadcast)
+bool pcFire = true;
+public Action PlayerConnect(Handle event, const char[] name, bool dontBroadcast)
 {
-    new bool:botquota_silent = GetConVarBool(gCvars[CVAR_BOTQUOTA_SILENT]);
+    bool botquota_silent = GetConVarBool(gCvars.CVAR_BOTQUOTA_SILENT);
     if (!botquota_silent)
         return Plugin_Continue;
     
-    decl String:address[64];
+    char address[64];
     GetEventString(event, "address", address, sizeof(address));
     
     if (pcFire && StrEqual(address, "none"))
     {
-        decl String:pname[64];
-        decl String:networkid[64];
+        char pname[64];
+        char networkid[64];
         
         GetEventString(event, "name", pname, sizeof(pname));
         GetEventString(event, "networkid", networkid, sizeof(networkid));
-        new Handle:hPlayerConnect = CreateEvent("player_connect", true);
+        Handle hPlayerConnect = CreateEvent("player_connect", true);
         
         SetEventString(hPlayerConnect, "name", pname);
         SetEventInt(hPlayerConnect, "index", GetEventInt(event, "index"));
@@ -71,30 +71,30 @@ public Action:PlayerConnect(Handle:event, const String:name[], bool:dontBroadcas
     return Plugin_Continue;
 }
 
-new bool:pdFire = true;
-public Action:PlayerDisconnect(Handle:event, const String:name[], bool:dontBroadcast)
+bool pdFire = true;
+public Action PlayerDisconnect(Handle event, const char[] name, bool dontBroadcast)
 {
-    new bool:botquota_silent = GetConVarBool(gCvars[CVAR_BOTQUOTA_SILENT]);
+    bool botquota_silent = GetConVarBool(gCvars.CVAR_BOTQUOTA_SILENT);
     if (!botquota_silent)
         return Plugin_Continue;
     
-    new userid = GetEventInt(event, "userid");
-    new index = GetClientOfUserId(userid);
+    int userid = GetEventInt(event, "userid");
+    int index = GetClientOfUserId(userid);
     
     if (!index || !IsClientInGame(index))
         return Plugin_Continue;
     
     if (pdFire && IsFakeClient(index))
     {
-        decl String:reason[192];
-        decl String:pname[64];
-        decl String:networkid[64];
+        char reason[192];
+        char pname[64];
+        char networkid[64];
         
         GetEventString(event, "reason", reason, sizeof(reason));
         GetEventString(event, "name", pname, sizeof(pname));
         GetEventString(event, "networkid", networkid, sizeof(networkid));
         
-        new Handle:hPlayerDisconnect = CreateEvent("player_disconnect", true);
+        Handle hPlayerDisconnect = CreateEvent("player_disconnect", true);
         
         SetEventInt(hPlayerDisconnect, "userid", userid);
         SetEventString(hPlayerDisconnect, "reason", reason);
@@ -111,7 +111,7 @@ public Action:PlayerDisconnect(Handle:event, const String:name[], bool:dontBroad
     return Plugin_Continue;
 }
 
-public Action:RoundStart(Handle:event, const String:name[], bool:dontBroadcast)
+public Action RoundStart(Handle event, const char[] name, bool dontBroadcast)
 {
     UpdateHostname();
     
@@ -123,7 +123,7 @@ public Action:RoundStart(Handle:event, const String:name[], bool:dontBroadcast)
     
     ZRiot_PrintToChat(0, "Round objective");
     
-    decl String:storyline[192];
+    char storyline[192];
     GetDayStoryLine(gDay, storyline, sizeof(storyline));
     
     if (storyline[0])
@@ -141,7 +141,7 @@ public Action:RoundStart(Handle:event, const String:name[], bool:dontBroadcast)
         tHUD = INVALID_HANDLE;
     }
     
-    new bool:hud = GetConVarBool(gCvars[CVAR_HUD]);
+    bool hud = GetConVarBool(gCvars.CVAR_HUD);
     if (hud)
     {
         tHUD = CreateTimer(5.0, HUD, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
@@ -156,7 +156,7 @@ public Action:RoundStart(Handle:event, const String:name[], bool:dontBroadcast)
     }
 }
 
-public Action:RoundFreezeEnd(Handle:event, const String:name[], bool:dontBroadcast)
+public Action RoundFreezeEnd(Handle event, const char[] name, bool dontBroadcast)
 {
     RemoveObjectives();
     
@@ -166,7 +166,7 @@ public Action:RoundFreezeEnd(Handle:event, const String:name[], bool:dontBroadca
         tFreeze = INVALID_HANDLE;
     }
     
-    new Float:freeze = GetConVarFloat(gCvars[CVAR_FREEZE]);
+    float freeze = GetConVarFloat(gCvars.CVAR_FREEZE);
     if (freeze > 0)
     {
         FreezeZombies();
@@ -175,18 +175,18 @@ public Action:RoundFreezeEnd(Handle:event, const String:name[], bool:dontBroadca
     }   
 }
 
-public Action:RoundEnd(Handle:event, const String:name[], bool:dontBroadcast)
+public Action RoundEnd(Handle event, const char[] name, bool dontBroadcast)
 {
     ResetZombies(false);
     ClearTrie(trieDeaths);
     
     CreateTimer(0.0, AssignTeamTimer);
     
-    new reason = GetEventInt(event, "reason");
+    int reason = GetEventInt(event, "reason");
     
     if (reason == CTs_Win || reason == Terrorists_Win)
     {
-        new winner = GetEventInt(event, "winner");
+        int winner = GetEventInt(event, "winner");
         
         if (winner == gZombieTeam)
         {
@@ -215,12 +215,12 @@ public Action:RoundEnd(Handle:event, const String:name[], bool:dontBroadcast)
     }
 }
 
-new bool:ptFire = true;
-public Action:PlayerTeam_Pre(Handle:event, const String:name[], bool:dontBroadcast)
+bool ptFire = true;
+public Action PlayerTeam_Pre(Handle event, const char[] name, bool dontBroadcast)
 {
     if (ptFire)
     {
-        new Handle:hPlayerTeam = CreateEvent("player_team", true);
+        Handle hPlayerTeam = CreateEvent("player_team", true);
         
         SetEventInt(hPlayerTeam, "userid", GetEventInt(event, "userid"));
         SetEventInt(hPlayerTeam, "team", GetEventInt(event, "team"));
@@ -237,17 +237,17 @@ public Action:PlayerTeam_Pre(Handle:event, const String:name[], bool:dontBroadca
     return Plugin_Continue;
 }
 
-public Action:PlayerTeam_Post(Handle:event, const String:name[], bool:dontBroadcast)
+public Action PlayerTeam_Post(Handle event, const char[] name, bool dontBroadcast)
 {
-    new bool:disconnect = GetEventBool(event, "disconnect");
+    bool disconnect = GetEventBool(event, "disconnect");
     if (disconnect)
     {
         return;
     }
     
-    new index = GetClientOfUserId(GetEventInt(event, "userid"));
-    new oldteam = GetEventInt(event, "oldteam");
-    new team = GetEventInt(event, "team");
+    int index = GetClientOfUserId(GetEventInt(event, "userid"));
+    int oldteam = GetEventInt(event, "oldteam");
+    int team = GetEventInt(event, "team");
     
     if (team != CS_TEAM_SPECTATOR && oldteam == CS_TEAM_NONE || oldteam == CS_TEAM_SPECTATOR)
     {
@@ -269,16 +269,16 @@ public Action:PlayerTeam_Post(Handle:event, const String:name[], bool:dontBroadc
     }
 }
 
-public Action:CheckTeam(Handle:timer, any:index)
+public Action CheckTeam(Handle timer, any index)
 {
     AssignTeamClient(index, IsPlayerAlive(index));
 }
 
-public Action:PlayerSpawn(Handle:event, const String:name[], bool:dontBroadcast)
+public Action PlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 {
-    new index = GetClientOfUserId(GetEventInt(event, "userid"));
+    int index = GetClientOfUserId(GetEventInt(event, "userid"));
     
-    new team = GetClientTeam(index);
+    int team = GetClientTeam(index);
     if (team != CS_TEAM_T && team != CS_TEAM_CT)
     {
         return;
@@ -294,20 +294,20 @@ public Action:PlayerSpawn(Handle:event, const String:name[], bool:dontBroadcast)
         
         SetPlayerMoney(index, 0);
         
-        new bool:noblock = GetConVarBool(gCvars[CVAR_NOBLOCK]);
+        bool noblock = GetConVarBool(gCvars.CVAR_NOBLOCK);
         if (noblock)
         {
             NoCollide(index, true);
         }
         
-        decl String:zombieoverride[4];
+        char zombieoverride[4];
         GetDayZombieOverride(gDay, zombieoverride, sizeof(zombieoverride));
         
-        new zombieid;
+        int zombieid;
         
         if (adtZombies != INVALID_HANDLE && zombieoverride[0])
         {
-            new size = GetArraySize(adtZombies);
+            int size = GetArraySize(adtZombies);
             if (size)
             {
                 zombieid = GetRandomInt(0, size - 1);
@@ -325,16 +325,16 @@ public Action:PlayerSpawn(Handle:event, const String:name[], bool:dontBroadcast)
             Zombify(index, zombieid);
         }
         
-        new health = GetClientHealth(index);
+        int health = GetClientHealth(index);
         SetEntityHealth(index, health + GetDayHealthBoost(gDay));
         
-        new Float:fademin = GetDayMinFade(gDay);
-        new Float:fademax = GetDayMaxFade(gDay);
+        float fademin = GetDayMinFade(gDay);
+        float fademax = GetDayMaxFade(gDay);
         
         SetPlayerMinDist(index, fademin);
         SetPlayerMaxDist(index, fademax);
         
-        new knife = GetPlayerWeaponSlot(index, 2);
+        int knife = GetPlayerWeaponSlot(index, 2);
         
         if (knife != -1)
         {
@@ -349,7 +349,7 @@ public Action:PlayerSpawn(Handle:event, const String:name[], bool:dontBroadcast)
             ZRiot_PrintToChat(index, "!market reminder");
         }
         
-        new bool:noblock = GetConVarBool(gCvars[CVAR_NOBLOCK]);
+        bool noblock = GetConVarBool(gCvars.CVAR_NOBLOCK);
         if (noblock)
         {
             NoCollide(index, false);
@@ -361,10 +361,10 @@ public Action:PlayerSpawn(Handle:event, const String:name[], bool:dontBroadcast)
         SetPlayerFOV(index, DEFAULT_FOV);
         SetEntityGravity(index, DEFAULT_GRAVITY);
         
-        new bool:cashfill = GetConVarBool(gCvars[CVAR_CASHFILL]);
+        bool cashfill = GetConVarBool(gCvars.CVAR_CASHFILL);
         if (cashfill)
         {
-            new cash = GetConVarInt(gCvars[CVAR_CASHAMOUNT]);
+            int cash = GetConVarInt(gCvars.CVAR_CASHAMOUNT);
             SetPlayerMoney(index, cash);
         }
         
@@ -387,12 +387,12 @@ public Action:PlayerSpawn(Handle:event, const String:name[], bool:dontBroadcast)
     }
 }
 
-public Action:PlayerHurt(Handle:event, const String:name[], bool:dontBroadcast)
+public Action PlayerHurt(Handle event, const char[] name, bool dontBroadcast)
 {
-    new index = GetClientOfUserId(GetEventInt(event, "userid"));
-    new attacker = GetClientOfUserId(GetEventInt(event, "attacker"));
+    int index = GetClientOfUserId(GetEventInt(event, "userid"));
+    int attacker = GetClientOfUserId(GetEventInt(event, "attacker"));
     
-    decl String:weapon[32];
+    char weapon[32];
     GetEventString(event, "weapon", weapon, sizeof(weapon));
     
     if (!IsPlayerZombie(index))
@@ -405,16 +405,15 @@ public Action:PlayerHurt(Handle:event, const String:name[], bool:dontBroadcast)
         TargetPlayer(attacker, index);
     }
     
-    new maxplayers = GetMaxClients();
-    new clients[maxplayers];
-    new numClients = GetClientTargeters(index, clients, maxplayers);
+    int clients[64];
+    int numClients = GetClientTargeters(index, clients, MaxClients);
     
     UpdateHUD(clients, numClients);
     
     if (GetRandomInt(1, 5) == 1)
     {
-        decl String:sound[64];
-        new randsound = GetRandomInt(1, 6);
+        char sound[64];
+        int randsound = GetRandomInt(1, 6);
         
         Format(sound, sizeof(sound), "npc/zombie/zombie_pain%d.wav", randsound);
         
@@ -422,25 +421,25 @@ public Action:PlayerHurt(Handle:event, const String:name[], bool:dontBroadcast)
         EmitSoundToAll(sound, index);
     }
     
-    new bool:napalm = GetConVarBool(gCvars[CVAR_NAPALM]);
+    bool napalm = GetConVarBool(gCvars.CVAR_NAPALM);
     
     if (napalm && StrEqual(weapon, "hegrenade", false))
     {
-        new Float:burntime = GetConVarFloat(gCvars[CVAR_NAPALM_TIME]);
+        float burntime = GetConVarFloat(gCvars.CVAR_NAPALM_TIME);
         IgniteEntity(index, burntime);
     }
 }
 
-public Action:PlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)
+public Action PlayerDeath(Handle event, const char[] name, bool dontBroadcast)
 {
-    new index = GetClientOfUserId(GetEventInt(event, "userid"));
+    int index = GetClientOfUserId(GetEventInt(event, "userid"));
     
     if (tHUD == INVALID_HANDLE)
     {
         return;
     }
     
-    new bool:respawn = GetDayRespawn(gDay);
+    bool respawn = GetDayRespawn(gDay);
     
     if (IsPlayerZombie(index))
     {
@@ -449,16 +448,16 @@ public Action:PlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)
         SetEntProp(index, Prop_Data, "m_takedamage", 2, 1);
         SetEntProp(index, Prop_Data, "m_fFlags", FL_ONGROUND);
         
-        decl String:sound[64];
+        char sound[64];
         
-        new randsound = GetRandomInt(1, 3);
+        int randsound = GetRandomInt(1, 3);
         Format(sound, sizeof(sound), "npc/zombie/zombie_die%d.wav", randsound);
         
         PrecacheSound(sound);
         EmitSoundToAll(sound, index);
         
-        new zombiecount = GetLiveZombieCount();
-        new zombiemax = GetConVarInt(gCvars[CVAR_ZOMBIEMAX]);
+        int zombiecount = GetLiveZombieCount();
+        int zombiemax = GetConVarInt(gCvars.CVAR_ZOMBIEMAX);
         
         if (respawn || zombiecount > zombiemax)
         {
@@ -478,7 +477,7 @@ public Action:PlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)
     else
     {
         ChangeClientDeathCount(index, 1);
-        new deaths_before_zombie = GetDayDeathsBeforeZombie(gDay);
+        int deaths_before_zombie = GetDayDeathsBeforeZombie(gDay);
         
         if (deaths_before_zombie > 0 && GetClientDeathCount(index) >= deaths_before_zombie && GetLiveHumanCount() > 0)
         {
@@ -500,10 +499,10 @@ public Action:PlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)
         }
     }
     
-    new Float:delay = GetConVarFloat(gCvars[CVAR_RAGDOLL_REMOVE]);
+    float delay = GetConVarFloat(gCvars.CVAR_RAGDOLL_REMOVE);
     if (delay > 0.0)
     {
-        new ragdoll = GetEntPropEnt(index, Prop_Send, "m_hRagdoll");
+        int ragdoll = GetEntPropEnt(index, Prop_Send, "m_hRagdoll");
         
         CreateTimer(delay, RemoveRagdoll, ragdoll);
     }
@@ -515,16 +514,16 @@ public Action:PlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)
     }
 }
 
-public Action:PlayerJump(Handle:event, const String:name[], bool:dontBroadcast)
+public Action PlayerJump(Handle event, const char[] name, bool dontBroadcast)
 {
-    new index = GetClientOfUserId(GetEventInt(event, "userid"));
+    int index = GetClientOfUserId(GetEventInt(event, "userid"));
     
     if (!IsPlayerZombie(index))
     {
         return;
     }
     
-    new Float:vel[3] = {0.0, 0.0, 0.0};
+    float vel[3] = {0.0, 0.0, 0.0};
     vel[2] = GetZombieJump(gZombieID[index]);
     
     SetPlayerVelocity(index, vel);

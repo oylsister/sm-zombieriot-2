@@ -6,20 +6,20 @@
  * ====================
  */
 
-new String:skyname[32];
-new String:hostname[256];
+char skyname[32];
+char hostname[256];
 
-new gZombieID[MAXPLAYERS+1];
+int gZombieID[MAXPLAYERS+1];
 
-HookCommands()
+void HookCommands()
 {
     RegConsoleCmd("nightvision", Command_NightVision);
 }
 
-public Action:Command_NightVision(client, argc)
+public Action Command_NightVision(int client, int argc)
 {
-    new bool:allow_disable = GetConVarBool(gCvars[CVAR_ZVISION_ALLOW_DISABLE]);
-    new bool:enabled = GetConVarBool(gCvars[CVAR_ENABLE]);
+    bool allow_disable = GetConVarBool(gCvars.CVAR_ZVISION_ALLOW_DISABLE);
+    bool enabled = GetConVarBool(gCvars.CVAR_ENABLE);
     if (!allow_disable || !enabled)
     {
         return;
@@ -43,26 +43,26 @@ public Action:Command_NightVision(client, argc)
     }
 }
 
-FindMapSky()
+void FindMapSky()
 {
     GetConVarString(FindConVar("sv_skyname"), skyname, sizeof(skyname));
 }
 
-FindHostname()
+void FindHostname()
 {
     GetConVarString(FindConVar("hostname"), hostname, sizeof(hostname));
 }
 
-ChangeLightStyle()
+void ChangeLightStyle()
 {
-    new bool:dark = GetConVarBool(gCvars[CVAR_DARK]);
+    bool dark = GetConVarBool(gCvars.CVAR_DARK);
     if (dark)
     {
-        decl String:darkness[2];
-        decl String:sky[32];
+        char darkness[2];
+        char sky[32];
         
-        GetConVarString(gCvars[CVAR_DARK_LEVEL], darkness, sizeof(darkness));
-        GetConVarString(gCvars[CVAR_DARK_SKY], sky, sizeof(sky));
+        GetConVarString(gCvars.CVAR_DARK_LEVEL, darkness, sizeof(darkness));
+        GetConVarString(gCvars.CVAR_DARK_SKY, sky, sizeof(sky));
         
         SetLightStyle(0, darkness);
         SetConVarString(FindConVar("sv_skyname"), sky, true);
@@ -74,9 +74,9 @@ ChangeLightStyle()
     }
 }
 
-UpdateHostname()
+void UpdateHostname()
 {
-    decl String:hostname_prefixed[256];
+    char hostname_prefixed[256];
     
     SetGlobalTransTarget(LANG_SERVER);
     Format(hostname_prefixed, sizeof(hostname_prefixed), "%t %s", "Hostname prefix", gDay + 1, dCount, hostname);
@@ -84,12 +84,12 @@ UpdateHostname()
     SetHostname(hostname_prefixed);
 }
 
-Zombify(client, zombieid)
+void Zombify(int client, int zombieid)
 {
     gZombieID[client] = zombieid;
     
     RemoveAllPlayersWeapons(client);
-    new knife = GivePlayerItem(client, "weapon_knife");
+    int knife = GivePlayerItem(client, "weapon_knife");
     
     if (knife != -1)
     {
@@ -109,27 +109,27 @@ Zombify(client, zombieid)
     }
 }
 
-ZombiesWin()
+void ZombiesWin()
 {
-    new bool:regression = GetConVarBool(gCvars[CVAR_REGRESSION]);
+    bool regression = GetConVarBool(gCvars.CVAR_REGRESSION);
     
     if (gDay > 0 && regression)
     {
         gDay--;
     }
     
-    new bool:fade = GetConVarBool(gCvars[CVAR_ROUNDFADE]);
+    bool fade = GetConVarBool(gCvars.CVAR_ROUNDFADE);
     if (fade)
         Fade(0, 2000, 2000, 2, 255, 0, 0, 255);
     
-    new bool:overlays = GetConVarBool(gCvars[CVAR_OVERLAYS]);
+    bool overlays = GetConVarBool(gCvars.CVAR_OVERLAYS);
     if (overlays)
         ShowOverlays(5.0, gZombieTeam);
     
     FreezeZombies();
 }
 
-HumansWin()
+void HumansWin()
 {
     gDay++;
         
@@ -142,26 +142,25 @@ HumansWin()
         GotoNextMap();
     }
     
-    new bool:fade = GetConVarBool(gCvars[CVAR_ROUNDFADE]);
+    bool fade = GetConVarBool(gCvars.CVAR_ROUNDFADE);
     if (fade)
         Fade(0, 2000, 2000, 2, 0, 0, 255, 255);
     
-    new bool:overlays = GetConVarBool(gCvars[CVAR_OVERLAYS]);
+    bool overlays = GetConVarBool(gCvars.CVAR_OVERLAYS);
     if (overlays)
         ShowOverlays(5.0, gHumanTeam);
     
     FreezeZombies();
 }
 
-RoundDraw()
+void RoundDraw()
 {
     Fade(0, 1000, 2000, 2, 0, 0, 0, 255);
 }
 
-FreezeZombies()
+void FreezeZombies()
 {
-    new maxplayers = GetMaxClients();
-    for (new x = 1; x <= maxplayers; x++)
+    for (int x = 1; x <= MaxClients; x++)
     {
         if (!IsClientInGame(x) || !IsPlayerAlive(x) || !IsPlayerZombie(x))
         {
@@ -173,10 +172,9 @@ FreezeZombies()
     }
 }
 
-public Action:UnfreezeZombies(Handle:timer)
+public Action UnfreezeZombies(Handle timer)
 {
-    new maxplayers = GetMaxClients();
-    for (new x = 1; x <= maxplayers; x++)
+    for (int x = 1; x <= MaxClients; x++)
     {
         if (!IsClientInGame(x) || !IsPlayerAlive(x) || !IsPlayerZombie(x))
         {
@@ -190,12 +188,12 @@ public Action:UnfreezeZombies(Handle:timer)
     tFreeze = INVALID_HANDLE;
 }
 
-RemoveObjectives()
+void RemoveObjectives()
 {
-    decl String:classname[64];
+    char classname[64];
     
-    new maxentities = GetMaxEntities();
-    for (new x = 0; x <= maxentities; x++)
+    int maxentities = GetMaxEntities();
+    for (int x = 0; x <= maxentities; x++)
     {
         if(!IsValidEdict(x))
         {
@@ -213,7 +211,7 @@ RemoveObjectives()
     }
 }
 
-public Action:JoinZombie(Handle:timer, any:index)
+public Action JoinZombie(Handle timer, any index)
 {
     if (!IsClientInGame(index))
     {
@@ -223,7 +221,7 @@ public Action:JoinZombie(Handle:timer, any:index)
     ZRiot_Zombie(index);
 }
 
-public Action:ZombieRespawn(Handle:timer, any:index)
+public Action ZombieRespawn(Handle timer, any index)
 {
     if (!IsClientInGame(index))
     {
@@ -233,16 +231,16 @@ public Action:ZombieRespawn(Handle:timer, any:index)
     CS_RespawnPlayer(index);
 }
 
-StartRespawnTimer(client, bool:firstspawn)
+void StartRespawnTimer(int client, bool firstspawn)
 {
-    new respawn;
+    int respawn;
     if (firstspawn)
     {
-        respawn = GetConVarInt(gCvars[CVAR_FIRST_RESPAWN]);
+        respawn = GetConVarInt(gCvars.CVAR_FIRST_RESPAWN);
     }
     else
     {
-        respawn = GetConVarInt(gCvars[CVAR_RESPAWN]);
+        respawn = GetConVarInt(gCvars.CVAR_RESPAWN);
     }
     
     if (!respawn)
@@ -261,7 +259,7 @@ StartRespawnTimer(client, bool:firstspawn)
     tRespawn[client] = CreateTimer(1.0, HumanRespawn, client, TIMER_REPEAT);
 }
 
-public Action:HumanRespawn(Handle:timer, any:index)
+public Action HumanRespawn(Handle timer, any index)
 {
     if (!IsClientInGame(index))
     {
@@ -270,13 +268,13 @@ public Action:HumanRespawn(Handle:timer, any:index)
         return Plugin_Stop;
     }
     
-    new team = GetClientTeam(index);
+    int team = GetClientTeam(index);
     if (team == CS_TEAM_T || team == CS_TEAM_CT)
     {
         gRespawnTime[index]--;
     }
     
-    new timeremaining = (gRespawnTime[index] < 0) ? 0 : gRespawnTime[index];
+    int timeremaining = (gRespawnTime[index] < 0) ? 0 : gRespawnTime[index];
     
     ZRiot_PrintCenterText(index, "Respawn time", timeremaining);
     
@@ -292,7 +290,7 @@ public Action:HumanRespawn(Handle:timer, any:index)
     return Plugin_Stop;
 }
 
-StartZVision(client)
+void StartZVision(int client)
 {
     if (tZVision[client] != INVALID_HANDLE)
     {
@@ -300,15 +298,15 @@ StartZVision(client)
         tZVision[client] = INVALID_HANDLE;
     }
     
-    new bool:zvision = ZVision(client);
+    bool zvision = ZVision(client);
     if (zvision)
     {
-        new Float:redisplay = GetConVarFloat(gCvars[CVAR_ZVISION_REDISPLAY]);
+        float redisplay = GetConVarFloat(gCvars.CVAR_ZVISION_REDISPLAY);
         tZVision[client] = CreateTimer(redisplay, ZVisionTimer, client, TIMER_REPEAT);
     }
 }
 
-StopZVision(client)
+void StopZVision(int client)
 {
     if (tZVision[client] != INVALID_HANDLE)
     {
@@ -317,14 +315,14 @@ StopZVision(client)
     }
 }
 
-bool:ZVision(client)
+bool ZVision(int client)
 {
     if (IsFakeClient(client))
     {
         return false;
     }
     
-    decl String:zvision[256];
+    char zvision[256];
     GetZombieZVision(gZombieID[client], zvision, sizeof(zvision));
     
     if (zvision[0])
@@ -337,7 +335,7 @@ bool:ZVision(client)
     return false;
 }
 
-public Action:ZVisionTimer(Handle:timer, any:index)
+public Action ZVisionTimer(Handle timer, any index)
 {
     if (!IsClientInGame(index) || !IsPlayerZombie(index))
     {
@@ -351,14 +349,14 @@ public Action:ZVisionTimer(Handle:timer, any:index)
     return Plugin_Continue;
 }
 
-public Action:RemoveRagdoll(Handle:timer, any:ragdoll)
+public Action RemoveRagdoll(Handle timer, any ragdoll)
 {
     if (ragdoll == -1 || !IsValidEdict(ragdoll))
     {
         return;
     }
     
-    decl String:classname[64];
+    char classname[64];
     GetEdictClassname(ragdoll, classname, sizeof(classname));
     
     if (!StrEqual(classname, "cs_ragdoll"))
@@ -369,9 +367,9 @@ public Action:RemoveRagdoll(Handle:timer, any:ragdoll)
     RemoveEdict(ragdoll);
 }
 
-Fade(client, speed, hold, type, red, green, blue, alpha)
+void Fade(int client, int speed, int hold, int type, int red, int green, int blue, int alpha)
 {
-    new Handle:hFade = INVALID_HANDLE;
+    Handle hFade = INVALID_HANDLE;
     
     if (client)
     {
@@ -386,64 +384,79 @@ Fade(client, speed, hold, type, red, green, blue, alpha)
 	{
         // type 1 = IN
         // type 2 = OUT
-        
-    	BfWriteShort(hFade, speed);
-    	BfWriteShort(hFade, hold);
-    	BfWriteShort(hFade, type);
-    	BfWriteByte(hFade, red);
-    	BfWriteByte(hFade, green);
-    	BfWriteByte(hFade, blue);	
-    	BfWriteByte(hFade, alpha);
+        if(!csgo)
+        {
+            BfWriteShort(hFade, speed);
+            BfWriteShort(hFade, hold);
+            BfWriteShort(hFade, type);
+            BfWriteByte(hFade, red);
+            BfWriteByte(hFade, green);
+            BfWriteByte(hFade, blue);	
+            BfWriteByte(hFade, alpha);
+        }
+        else
+        {
+            int color[4];
+            color[0] = red;
+            color[1] = green;
+            color[2] = blue;
+            color[3] = alpha;
+			
+            PbSetInt(hFade, "duration", speed);
+            PbSetInt(hFade, "hold_time", hold);
+            PbSetInt(hFade, "flags", type);
+            PbSetColor(hFade, "clr", color);
+        }
     	EndMessage();
     }
 }
 
-InitClientDeathCount(client)
+void InitClientDeathCount(int client)
 {
-    if (IsFakeClient(client))
-        return;
+	if (IsFakeClient(client))
+		return;
     
-    decl String:steamid[64];
-    GetClientAuthString(client, steamid, sizeof(steamid));
+	char steamid[64];
+	GetClientAuthId(client, AuthId_Steam2, steamid, sizeof(steamid));
     
-    StrCat(steamid, sizeof(steamid), "_iDeaths");
+	StrCat(steamid, sizeof(steamid), "_iDeaths");
     
-    SetTrieValue(trieDeaths, steamid, 0, false);
+	SetTrieValue(trieDeaths, steamid, 0, false);
 }
 
-ChangeClientDeathCount(client, value)
+void ChangeClientDeathCount(int client, int value)
 {
     if (IsFakeClient(client))
         return;
     
-    decl String:steamid[64];
-    GetClientAuthString(client, steamid, sizeof(steamid));
+    char steamid[64];
+    GetClientAuthId(client, AuthId_Steam2, steamid, sizeof(steamid));
     
     StrCat(steamid, sizeof(steamid), "_iDeaths");
     
-    new newvalue = value != 0 ? GetClientDeathCount(client) + value : 0;
+    int newvalue = value != 0 ? GetClientDeathCount(client) + value : 0;
     SetTrieValue(trieDeaths, steamid, newvalue, true);
 }
 
-GetClientDeathCount(client)
+int GetClientDeathCount(int client)
 {
     if (IsFakeClient(client))
         return 0;
     
-    decl String:steamid[64];
-    GetClientAuthString(client, steamid, sizeof(steamid));
+    char steamid[64];
+    GetClientAuthId(client, AuthId_Steam2, steamid, sizeof(steamid));
     
     StrCat(steamid, sizeof(steamid), "_iDeaths");
     
-    new value;
+    int value;
     GetTrieValue(trieDeaths, steamid, value);
     
     return value;
 }
 
-SetHostname(const String:name[])
+void SetHostname(const char[] name)
 {
-    new bool:update_hostname = GetConVarBool(gCvars[CVAR_HOSTNAME_UPDATE]);
+    bool update_hostname = GetConVarBool(gCvars.CVAR_HOSTNAME_UPDATE);
     if (!update_hostname)
     {
         return;
@@ -452,7 +465,7 @@ SetHostname(const String:name[])
     ServerCommand("hostname \"%s\"", name);
 }
 
-ZRiot_Zombie(client)
+void ZRiot_Zombie(int client)
 {
     if (bZombie[client])
     {
@@ -467,7 +480,7 @@ ZRiot_Zombie(client)
     Call_Finish();
 }
 
-ZRiot_Human(client)
+void ZRiot_Human(int client)
 {
     if (!bZombie[client])
     {
@@ -482,12 +495,12 @@ ZRiot_Human(client)
     Call_Finish();
 }
 
-bool:IsPlayerZombie(client)
+bool IsPlayerZombie(int client)
 {
     return bZombie[client];
 }
 
-bool:IsPlayerHuman(client)
+bool IsPlayerHuman(int client)
 {
     return !bZombie[client];
 }

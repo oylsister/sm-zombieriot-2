@@ -6,18 +6,18 @@
  * ====================
  */
 
-FormatTextString(String:text[], maxlen)
+void FormatTextString(char[] text, int maxlen)
 {
-    Format(text, maxlen, "@green[%t] @default%s", "ZRiot", text);
+    Format(text, maxlen, " @green[%t] @default%s", "ZRiot", text);
     
     ReplaceString(text, maxlen, "@default","\x01");
     ReplaceString(text, maxlen, "@lgreen","\x03");
     ReplaceString(text, maxlen, "@green","\x04");
 }
 
-stock ZRiot_PrintToChat(client, any:...)
+stock void ZRiot_PrintToChat(int client, any ...)
 {
-    decl String:phrase[192];
+    char phrase[192];
     
     if (client)
     {
@@ -37,8 +37,7 @@ stock ZRiot_PrintToChat(client, any:...)
         
         PrintToServer(phrase);
         
-        new maxplayers = GetMaxClients();
-        for (new x = 1; x <= maxplayers; x++)
+        for (int x = 1; x <= MaxClients; x++)
         {
             if (IsClientInGame(x))
             {
@@ -53,46 +52,71 @@ stock ZRiot_PrintToChat(client, any:...)
     }
 }
 
-stock ZRiot_PrintCenterText(client, any:...)
+stock void ZRiot_PrintCenterText(int client, any ...)
 {
     SetGlobalTransTarget(client);
     
-    decl String:phrase[192];
+    char phrase[192];
     
     VFormat(phrase, sizeof(phrase), "%t", 2);
     
     PrintCenterText(client, phrase);
 }
 
-stock ZRiot_HudHint(client, any:...)
+stock void ZRiot_HudHint(int client, any ...)
 {
     SetGlobalTransTarget(client);
     
-    decl String:phrase[192];
+    char phrase[192];
     
     VFormat(phrase, sizeof(phrase), "%t", 2);
     
-    new Handle:hHintText = StartMessageOne("HintText", client);
-    if (hHintText != INVALID_HANDLE)
+    Handle hHintText = StartMessageOne("HintText", client);
+	
+    if(!csgo)
     {
-        BfWriteByte(hHintText, -1);
+        if (hHintText != INVALID_HANDLE)
+        {
+            BfWriteByte(hHintText, -1);
         
-        Call_StartForward(hOnClientHUDUpdate);
-        Call_PushCell(client);
-        Call_PushStringEx(phrase, sizeof(phrase), SM_PARAM_STRING_COPY, SM_PARAM_COPYBACK);
-        Call_Finish();
+            Call_StartForward(hOnClientHUDUpdate);
+            Call_PushCell(client);
+            Call_PushStringEx(phrase, sizeof(phrase), SM_PARAM_STRING_COPY, SM_PARAM_COPYBACK);
+            Call_Finish();
         
-        BfWriteString(hHintText, phrase);
-        EndMessage();
+            BfWriteString(hHintText, phrase);
+            EndMessage();
+        }
+    }
+    else
+    {
+        if (hHintText != INVALID_HANDLE)
+        {
+            PbSetInt(hHintText, "msg_dst", -1);
+        
+            Call_StartForward(hOnClientHUDUpdate);
+            Call_PushCell(client);
+            Call_PushStringEx(phrase, sizeof(phrase), SM_PARAM_STRING_COPY, SM_PARAM_COPYBACK);
+            Call_Finish();
+        
+            PbAddString(hHintText, "params", "#SFUI_ContractKillStart");
+            PbAddString(hHintText, "params", phrase);
+            PbAddString(hHintText, "params", NULL_STRING);
+            PbAddString(hHintText, "params", NULL_STRING);
+            PbAddString(hHintText, "params", NULL_STRING);
+            PbAddString(hHintText, "params", NULL_STRING);
+			
+            EndMessage();
+        }
     }
 }
 
-stock ZRiot_PrintToServer(any:...)
+stock void ZRiot_PrintToServer(any ...)
 {
     SetGlobalTransTarget(LANG_SERVER);
     
-    decl String:phrase[192];
-    decl String:buffer[192];
+    char phrase[192];
+    char buffer[192];
     
     VFormat(phrase, sizeof(phrase), "%t", 1);
     Format(buffer, sizeof(buffer), "[%t] %s", "ZRiot", phrase);
@@ -100,20 +124,20 @@ stock ZRiot_PrintToServer(any:...)
     PrintToServer(buffer);
 }
 
-stock ZRiot_LogMessage(any:...)
+stock void ZRiot_LogMessage(any ...)
 {
     SetGlobalTransTarget(LANG_SERVER);
     
-    decl String:phrase[192];
+    char phrase[192];
     
     VFormat(phrase, sizeof(phrase), "%t", 1);
     
     LogMessage(phrase);
 }
 
-stock ZRiot_ReplyToCommand(client, any:...)
+stock void ZRiot_ReplyToCommand(int client, any ...)
 {
-    decl String:phrase[192];
+    char phrase[192];
     
     SetGlobalTransTarget(client);
         
