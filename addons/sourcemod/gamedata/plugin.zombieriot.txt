@@ -1,0 +1,16 @@
+"Games"
+{
+	"cstrike"
+	{
+		"Signatures"
+		{
+			"TerminateRound"
+			{
+				"library"	"server"
+				"windows"	"\x83\xEC\x2A\x53\x8B\x5C\x2A\x2A\x55\x56\x57\x33\xF6\x8B\xE9\x33"
+				"linux"		"@_ZN12CCSGameRules14TerminateRoundEfi"
+			}
+
+		}
+	}
+}

@@ -1,0 +1,83 @@
+// ====================
+//     Zombie Riot
+//   File: zombies.txt
+//   Author: Greyscale
+// ====================
+//
+// Here you can pre-define the different zombies and their abilities
+// Format:
+//
+// "strong" - Any word(s) to help keep track of the different zombies
+//	"type" - "normal" will spawn the zombie randomly in the day (unless the day has a zombieoverride)
+//	       - "override_required" this zombie can only be spawned via an override defined in days.txt
+//	"model"	- Path to the model this zombie will use (NO .mdl extension)
+//	"health" - Spawn HP of this zombie
+//	"speed" - Speed of the zombie (Default: 300)
+//	"gravity" - Gravity of the zombie (0.5: Half, 1.0: Default, 2.0: Double)
+//	"jump" - Extra jump power that the zombie will receive (recommended you lower the gravity as you raise this)
+//	"fov" - Field of vision (Default: 90)
+//	"zvision" - Overlay to display on the zombies' screen (Omit line or "" to disable)
+
+
+"zombies"
+{
+	"zombie1"
+	{
+		"type"		"normal"
+		"model"		"models/player/zh/zh_charple001.mdl"
+		"health"	"100"
+		"speed"		"345"
+		"gravity"	"0.9"
+		"jump"		"15.0"
+		"fov"		"110"
+		"zvision"	"overlays/zr/zvision"
+	}
+
+	"zombie2"
+	{
+		"type"		"normal"
+		"model"		"models/player/zh/zh_zombie003.mdl"
+		"health"	"100"
+		"speed"		"345"
+		"gravity"	"0.95"
+		"jump"		"10.0"
+		"fov"		"110"
+		"zvision"	"overlays/zr/zvision"
+	}
+
+	"zombie3"
+	{
+		"type"		"normal"
+		"model"		"models/player/zh/zh_corpse002.mdl"
+		"health"	"100"
+		"speed"		"360"
+		"gravity"	"0.9"
+		"jump"		"17.0"
+		"fov"		"110"
+		"zvision"	"overlays/zr/zvision"
+	}
+
+	"hellknight"
+	{
+		"type"		"override_required"
+		"model"		"models/player/ics/hellknight_red/t_guerilla.mdl"
+		"health"	"30000"
+		"speed"		"500"
+		"gravity"	"0.6"
+		"jump"		"35.0"
+		"fov"		"110"
+		"zvision"	"overlays/zr/zvision"
+	}
+
+//	"headcrab" // headcrab, my game seems to crash when mixing these in with other zombies, so i recommend making it a boss
+//	{
+//		"type"		"override_required"
+//		"model"		"models/headcrab.mdl"
+//		"health"	"10"
+//		"speed"		"400"
+//		"gravity"	"0.9"
+//		"jump"		"15.0"
+//		"fov"		"110"
+//		"zvision"	"overlays/zr/zvision"
+//	}
+}

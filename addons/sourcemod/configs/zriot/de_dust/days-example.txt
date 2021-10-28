@@ -1,0 +1,4 @@
+"days"
+{
+	// all your day data configs for de_dust go here (same format as zriot/days.txt)
+}

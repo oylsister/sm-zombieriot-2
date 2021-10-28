@@ -1,0 +1,4 @@
+"zombies"
+{
+	// all your zombies you want for de_dust go here (same format as zriot/zombies.txt)
+}

@@ -1,0 +1,106 @@
+// ====================
+//     Zombie Riot
+//   File: days.txt
+//   Author: Greyscale
+// ====================
+//
+// Here you can pre-define each day and its difficulty
+// Format:
+//
+// "display" - This is what the day will be referred to
+//	"count" - How many zombies that need to be killed before moving onto the next day
+//	"healthboost" - The amount of extra HP each zombie will get in addition to that zombie's initial health
+//	"respawn" - If enabled, all zombies will be immediately respawn after death, when the day kill limit is
+//	          - reached, the remaining zombies dig into the ground and the next day will begin
+//                - Respawn is typically 0 for bosses
+//	"deaths_before_zombie" - How many deaths as human before being switched to the Zombie force (0: Disable)
+//	"fademin" - Distance, in game units, at which zombies start fading away ("" to disable)
+//	"fademax" - Distance, in game units, at which the zombie is fully invisible ("" to disable)
+//	"zombieoverride" - OPTIONAL: If specified only listed zombies will be spawned during this day, separate with "," (look in zombies.txt)
+//	"storyline" - OPTIONAL: If specified, the text will be printed on round_start for the day, used to illustrate some kind of story line
+
+
+"days"
+{
+	"Outbreak"
+	{
+		"count"			"15"
+		"healthboost"		"0"
+		"respawn"		"1"
+		"deaths_before_zombie"	"2"
+		"fademin"		"600.0"
+		"fademax"		"800.0"
+	}
+
+	"Uprising"
+	{
+		"count"			"25"
+		"healthboost"		"25"
+		"respawn"		"0"
+		"deaths_before_zombie"	"0"
+		"fademin"		"600.0"
+		"fademax"		"800.0"
+	}
+
+	"Riot!"
+	{
+		"count"			"30"
+		"healthboost"		"50"
+		"respawn"		"1"
+		"deaths_before_zombie"	"2"
+		"fademin"		"600.0"
+		"fademax"		"800.0"
+	}
+
+	"Rampage"
+	{
+		"count"			"50"
+		"healthboost"		"75"
+		"respawn"		"1"
+		"deaths_before_zombie"	"2"
+		"fademin"		"600.0"
+		"fademax"		"800.0"
+	}
+
+	"Surge"
+	{
+		"count"			"75"
+		"healthboost"		"100"
+		"respawn"		"1"
+		"deaths_before_zombie"	"2"
+		"fademin"		"600.0"
+		"fademax"		"800.0"
+	}
+
+	"Storm"
+	{
+		"count"			"100"
+		"healthboost"		"125"
+		"respawn"		"1"
+		"deaths_before_zombie"	"2"
+		"fademin"		"600.0"
+		"fademax"		"800.0"
+	}
+
+	"Containment"
+	{
+		"count"			"200"
+		"healthboost"		"150"
+		"respawn"		"1"
+		"deaths_before_zombie"	"2"
+		"fademin"		"300.0"
+		"fademax"		"500.0"
+	}
+
+	"Final Stand"
+	{
+		
+		"count"			"1"
+		"healthboost"		"0"
+		"respawn"		"0"
+		"deaths_before_zombie"	"0"
+		"fademin"		"400.0"
+		"fademax"		"600.0"
+		"zombieoverride"	"hellknight"
+	}
+}
