@@ -60,7 +60,7 @@ stock void ZRiot_PrintCenterText(int client, any ...)
     
     VFormat(phrase, sizeof(phrase), "%t", 2);
     
-    PrintCenterText(client, phrase);
+    PrintCenterText(client, "%s", phrase);
 }
 
 stock void ZRiot_HudHint(int client, any ...)
@@ -70,11 +70,11 @@ stock void ZRiot_HudHint(int client, any ...)
     char phrase[192];
     
     VFormat(phrase, sizeof(phrase), "%t", 2);
-    
-    Handle hHintText = StartMessageOne("HintText", client);
 	
     if(!csgo)
     {
+        Handle hHintText = StartMessageOne("HintText", client);
+		
         if (hHintText != INVALID_HANDLE)
         {
             BfWriteByte(hHintText, -1);
@@ -90,24 +90,12 @@ stock void ZRiot_HudHint(int client, any ...)
     }
     else
     {
-        if (hHintText != INVALID_HANDLE)
-        {
-            PbSetInt(hHintText, "msg_dst", -1);
+        Call_StartForward(hOnClientHUDUpdate);
+        Call_PushCell(client);
+        Call_PushStringEx(phrase, sizeof(phrase), SM_PARAM_STRING_COPY, SM_PARAM_COPYBACK);
+        Call_Finish();
         
-            Call_StartForward(hOnClientHUDUpdate);
-            Call_PushCell(client);
-            Call_PushStringEx(phrase, sizeof(phrase), SM_PARAM_STRING_COPY, SM_PARAM_COPYBACK);
-            Call_Finish();
-        
-            PbAddString(hHintText, "params", "#SFUI_ContractKillStart");
-            PbAddString(hHintText, "params", phrase);
-            PbAddString(hHintText, "params", NULL_STRING);
-            PbAddString(hHintText, "params", NULL_STRING);
-            PbAddString(hHintText, "params", NULL_STRING);
-            PbAddString(hHintText, "params", NULL_STRING);
-			
-            EndMessage();
-        }
+        PrintHintText(client, "%s", phrase);
     }
 }
 
