@@ -78,13 +78,16 @@ void FindOffsets()
 
 void SetupGameData()
 {
-    hGameConf = LoadGameConfigFile("plugin.zombieriot");
+    if(!csgo)
+    {
+        hGameConf = LoadGameConfigFile("plugin.zombieriot");
     
-    StartPrepSDKCall(SDKCall_GameRules);
-    PrepSDKCall_SetFromConf(hGameConf, SDKConf_Signature, "TerminateRound");
-    PrepSDKCall_AddParameter(SDKType_Float, SDKPass_Plain);
-    PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
-    hTerminateRound = EndPrepSDKCall();
+        StartPrepSDKCall(SDKCall_GameRules);
+        PrepSDKCall_SetFromConf(hGameConf, SDKConf_Signature, "TerminateRound");
+        PrepSDKCall_AddParameter(SDKType_Float, SDKPass_Plain);
+        PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
+        hTerminateRound = EndPrepSDKCall();
+    }
 }
 
 void SetPlayerVelocity(int client, const float vec[3])
@@ -190,5 +193,12 @@ void TerminateRound(float delay, int reason)
     if (tHUD == INVALID_HANDLE)
         return;
     
-    SDKCall(hTerminateRound, delay, reason);
+    if(!csgo)
+        SDKCall(hTerminateRound, delay, reason);
+	
+    else
+    {
+        CSRoundEndReason iReason = view_as<CSRoundEndReason>(reason);
+        CS_TerminateRound(delay, iReason, true);
+    }
 }
