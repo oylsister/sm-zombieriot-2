@@ -180,7 +180,7 @@ void BeginDay()
     int zombiemax = GetDayMaxZM(gDay);
 	
     if(zombiemax < 0)
-        GetConVarInt(gCvars.CVAR_ZOMBIEMAX);
+        zombiemax = GetConVarInt(gCvars.CVAR_ZOMBIEMAX);
     
     int spawncount;
     bool respawn = GetDayRespawn(gDay);
