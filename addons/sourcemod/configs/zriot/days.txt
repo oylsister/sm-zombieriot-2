@@ -30,6 +30,7 @@
 		"deaths_before_zombie"	"2"
 		"fademin"		"600.0"
 		"fademax"		"800.0"
+		"maxzm"			"10"	// allow 10 bot to be spawned in the same time in this days
 	}
 
 	"Uprising"
