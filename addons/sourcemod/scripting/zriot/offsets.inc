@@ -16,9 +16,6 @@ int offsBuyZone;
 int offsFadeMin;
 int offsFadeMax;
 
-Handle hGameConf = INVALID_HANDLE;
-Handle hTerminateRound = INVALID_HANDLE;
-
 void FindOffsets()
 {
     offsBaseVelocity = FindSendPropInfo("CBasePlayer", "m_vecBaseVelocity");
@@ -73,20 +70,6 @@ void FindOffsets()
     if (offsFadeMax == -1)
     {
         SetFailState("Couldn't find \"m_fadeMaxDist\"!");
-    }
-}
-
-void SetupGameData()
-{
-    if(!csgo)
-    {
-        hGameConf = LoadGameConfigFile("plugin.zombieriot");
-    
-        StartPrepSDKCall(SDKCall_GameRules);
-        PrepSDKCall_SetFromConf(hGameConf, SDKConf_Signature, "TerminateRound");
-        PrepSDKCall_AddParameter(SDKType_Float, SDKPass_Plain);
-        PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
-        hTerminateRound = EndPrepSDKCall();
     }
 }
 
@@ -190,15 +173,6 @@ stock void Util_RemovePlayerItem(int client, int weaponindex)
 
 void TerminateRound(float delay, int reason)
 {
-    if (tHUD == INVALID_HANDLE)
-        return;
-    
-    if(!csgo)
-        SDKCall(hTerminateRound, delay, reason);
-	
-    else
-    {
-        CSRoundEndReason iReason = view_as<CSRoundEndReason>(reason);
-        CS_TerminateRound(delay, iReason, true);
-    }
+    CSRoundEndReason iReason = view_as<CSRoundEndReason>(reason);
+    CS_TerminateRound(delay, iReason, true);
 }
