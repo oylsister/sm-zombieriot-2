@@ -415,7 +415,11 @@ public Action PlayerHurt(Handle event, const char[] name, bool dontBroadcast)
         char sound[64];
         int randsound = GetRandomInt(1, 6);
         
-        Format(sound, sizeof(sound), "npc/zombie/zombie_pain%d.wav", randsound);
+        if(!csgo)
+            Format(sound, sizeof(sound), "npc/zombie/zombie_pain%d.wav", randsound);
+        	
+        else
+            Format(sound, sizeof(sound), "sound/zr/zombie_pain%d.wav", randsound);
         
         PrecacheSound(sound);
         EmitSoundToAll(sound, index);
@@ -451,7 +455,12 @@ public Action PlayerDeath(Handle event, const char[] name, bool dontBroadcast)
         char sound[64];
         
         int randsound = GetRandomInt(1, 3);
-        Format(sound, sizeof(sound), "npc/zombie/zombie_die%d.wav", randsound);
+		
+        if(!csgo)
+            Format(sound, sizeof(sound), "npc/zombie/zombie_die%d.wav", randsound);
+		
+        else
+            Format(sound, sizeof(sound), "sound/zr/zombie_die%d.wav", randsound);
         
         PrecacheSound(sound);
         EmitSoundToAll(sound, index);
