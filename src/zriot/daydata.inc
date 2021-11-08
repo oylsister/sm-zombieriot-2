@@ -18,6 +18,8 @@ enum struct ZRiot_DayData
     float data_fademin;
     float data_fademax;
 	int data_maxzm;
+	char data_startmusic[PLATFORM_MAX_PATH];
+	char data_roundmusic[PLATFORM_MAX_PATH];
 }
 
 #define MAXDAYS 25
@@ -59,6 +61,8 @@ void LoadDayData(bool defaultconfig)
     char display[32];
     char zombieoverride[32*MAXZOMBIES];
     char storyline[192];
+    char startmusic[PLATFORM_MAX_PATH];
+    char roundmusic[PLATFORM_MAX_PATH];
     
     dCount = 0;
     do
@@ -79,6 +83,12 @@ void LoadDayData(bool defaultconfig)
         arrayDays[dCount].data_fademin = KvGetFloat(kvDays, "fademin");
         arrayDays[dCount].data_fademax = KvGetFloat(kvDays, "fademax");
         arrayDays[dCount].data_maxzm = KvGetNum(kvDays, "maxzm", -1);
+
+        KvGetString(kvDays, "startmusic", startmusic, sizeof(startmusic));
+        strcopy(arrayDays[dCount].data_startmusic, PLATFORM_MAX_PATH, startmusic);
+
+        KvGetString(kvDays, "roundmusic", roundmusic, sizeof(roundmusic));
+        strcopy(arrayDays[dCount].data_roundmusic, PLATFORM_MAX_PATH, roundmusic);
         
         dCount++;
     } while (KvGotoNextKey(kvDays));
@@ -135,6 +145,16 @@ void GetDayZombieOverride(int day, char[] zombieoverride, int len)
 void GetDayStoryLine(int day, char[] storyline, int len)
 {
     strcopy(storyline, len, arrayDays[day].data_storyline);
+}
+
+void GetDayStartMusic(int day, char[] startmusic, int len)
+{
+    strcopy(startmusic, len, arrayDays[day].data_startmusic);
+}
+
+void GetDayRoundMusic(int day, char[] roundmusic, int len)
+{
+    strcopy(roundmusic, len, arrayDays[day].data_roundmusic);
 }
 
 int GetDayCount(int day)
