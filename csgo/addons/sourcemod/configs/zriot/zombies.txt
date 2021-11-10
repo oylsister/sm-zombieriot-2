@@ -1,0 +1,48 @@
+// Zombies CS:GO Configuration
+// Here you can pre-define the different zombies and their abilities
+// "strong" - Any word(s) to help keep track of the different zombies
+//	"type" - "normal" will spawn the zombie randomly in the day (unless the day has a zombieoverride)
+//	       - "override_required" this zombie can only be spawned via an override defined in days.txt
+//	"model"	- Path to the model this zombie will use (NO .mdl extension)
+//	"health" - Spawn HP of this zombie
+//	"speed" - Speed of the zombie (Default: 300)
+//	"gravity" - Gravity of the zombie (0.5: Half, 1.0: Default, 2.0: Double)
+//	"jump" - Extra jump power that the zombie will receive (recommended you lower the gravity as you raise this)
+//	"fov" - Field of vision (Default: 90)
+
+
+"zombies"
+{
+	"Zombie1_Default"
+	{
+		"type"		"normal"
+		"model"		"models/player/kuristaja/zombies/gozombie/gozombie.mdl"
+		"health"	"85"
+		"speed"		"315"
+		"gravity"	"0.9"
+		"jump"		"10.0"
+		"fov"		"110"
+	}
+
+	"SBPL"
+	{
+		"type"		"override_required"
+		"model"		"models/player/uuz/pl/pl_fix3.mdl"
+		"health"	"250"
+		"speed"		"315"
+		"gravity"	"0.95"
+		"jump"		"10.0"
+		"fov"		"110"
+	}
+
+	"HELL"
+	{
+		"type"		"override_required"
+		"model"		"models/player/custom_player/kodua/doom2016/hellknight_small.mdl"
+		"health"	"45000"
+		"speed"		"315"
+		"gravity"	"0.9"
+		"jump"		"11.0"
+		"fov"		"110"
+	}
+}

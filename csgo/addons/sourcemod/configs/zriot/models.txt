@@ -1,0 +1,11 @@
+// Default Model Paths (Without .mdl)
+// Add paths to models here
+// They will automatically be downloaded to the client
+//
+// ** DEFAULTS
+
+models/player/kuristaja/zombies/gozombie/gozombie.mdl
+models/player/uuz/pl/pl_fix3.mdl
+models/player/custom_player/kodua/doom2016/hellknight_small.mdl
+
+// ** END DEFAULTS **

@@ -1,0 +1,5 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/player/uuz/pl/c_black"
+	"$nodecal"				"1" 
+}

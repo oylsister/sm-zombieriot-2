@@ -1,0 +1,199 @@
+"Phrases"
+{
+	// ===========================
+	// Chat Messages
+	// ===========================
+
+	"Round objective"
+	{
+		"en"		"The game is @greenHumans vs. Zombies@default, humans must kill all the zombies to reach the next level."
+	}
+
+	"Feature is disabled"
+	{
+		"en"		"This feature has been disabled by the server host."
+	}
+
+	"Must be alive"
+	{
+		"en"		"Can only be used when alive."
+	}
+
+	"Must be dead"
+	{
+		"en"		"Can only be used when dead."
+	}
+
+	"!spawn reminder"
+	{
+		"en"		"Type \"!spawn\" in chat to join the game immediately."
+	}
+
+	"!market reminder"
+	{
+		"en"		"Type \"!market\" in chat to access weapons not normally available to both teams."
+	}
+
+	"You are now a zombie"
+	{
+		"en"		"You have been switched to the Zombie side, your goal is to kill the Humans."
+	}
+
+	"Game won"
+	{
+		"en"		"The Humans have prevailed, the Zombie race has been destroyed."
+	}
+
+	"Skip to day"
+	{
+		"#format"	"{1:d}"
+		"en"		"Jumping to Day {1}"
+	}
+
+	"Respawn time"
+	{
+		"#format"	"{1:d}"
+		"en"		"Respawn in: {1} seconds"
+	}
+
+	"Market out of buyzone"
+	{
+		"en"		"You are not in a buyzone."
+	}
+
+	"Weapon has been restricted"
+	{
+		"#format"	"{1:s}"
+		"en"		"Weapon @green\"{1}\" @defaulthas been restricted."
+	}
+
+	"Weapon group has been restricted"
+	{
+		"#format"	"{1:s}"
+		"en"		"Weapon group @green\"{1}\" @defaulthas been restricted."
+	}
+
+	"Weapon has been unrestricted"
+	{
+		"#format"	"{1:s}"
+		"en"		"Weapon @green\"{1}\" @defaulthas been unrestricted."
+	}
+
+	"Weapon group has been unrestricted"
+	{
+		"#format"	"{1:s}"
+		"en"		"Weapon group @green\"{1}\" @defaulthas been restricted."
+	}
+
+	"Weapon is restricted"
+	{
+		"#format"	"{1:s}"
+		"en"		"Weapon @green{1} @defaultis restricted."
+	}
+
+	"Weapon already restricted"
+	{
+		"#format"	"{1:s}"
+		"en"		"Weapon @green\"{1}\" @defaultis already restricted."
+	}
+
+	"Weapon invalid"
+	{
+		"#format"	"{1:s}"
+		"en"		"Weapon @green\"{1}\" @defaultis invalid or not currently restricted."
+	}
+
+	"Zombie cant use weapon"
+	{
+		"en"		"Zombies can't use weapons!"
+	}
+
+	"Suicide text"
+	{
+		"en"		"Nice try n00b!"
+	}
+
+	"DX90 not supported"
+	{
+		"#format"	"{1:d},{2:d}"
+		"en"		"Blocking Overlay - DX{1} Detected (DX{2} Required)"
+	}
+	// ===========================
+	// Menus
+	// ===========================
+
+	"Market title"
+	{
+		"en"		"Available Guns:"
+	}
+
+	"Market rebuy"
+	{
+		"en"		"Rebuy"
+	}
+
+	// ===========================
+	// HudHints
+	// ===========================
+
+	"HUD"
+	{
+		"#format"	"{1:d},{2:d},{3:s},{4:d},{5:d}"
+		"en"		"Day {1}/{2} - {3}\nZombies Left: {4}\nHumans Left: {5}\n "
+	}
+
+	"HUD target"
+	{
+		"#format"	"{1:d},{2:d},{3:s},{4:d},{5:d},{6:N},{7:d}"
+		"en"		"Day {1}/{2} - {3}\nZombies Left: {4}\nHumans Left: {5}\nTarget: {6} | Health: {7}"
+	}
+
+	// ===========================
+	// Server Messages
+	// ===========================
+
+	"ZRiot"
+	{
+		"en"		"ZRiot"
+	}
+
+	"Plugin loading"
+	{
+		"en"		"-----------|         Zombie Riot Loading        |----------"
+	}
+
+	"Plugin loaded"
+	{
+		"en"		"-----------|         Zombie Riot Loaded         |----------"
+	}
+
+	"Hostname prefix"
+	{
+		"#format"	"{1:d},{2:d}"
+		"en"		"[ZRiot Day: {1}/{2}]"
+	}
+
+	"Restrict weapon mapstart"
+	{
+		"#format"	"{1:s}"
+		"en"		"Restricted weapon: {1}"
+	}
+	
+	"Restrict weapon group mapstart"
+	{
+		"#format"	"{1:s}"
+		"en"		"Restricted group: {1}"
+	}
+
+	"Ambient sound load failed"
+	{
+		"#format"	"{1:s}"
+		"en"		"Invalid sound file: {1}"
+	}
+
+	"File load failed"
+	{
+		"#format"	"{1:s}"
+		"en"		"Invalid file path: \"{1}\", check downloads.txt"
+	}
+}

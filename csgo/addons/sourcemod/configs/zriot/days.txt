@@ -1,0 +1,54 @@
+//	Instructions Day Configuration Difficult 3
+//  "display" - This is what the day will be referred to
+//	"count" - How many zombies that need to be killed before moving onto the next day
+//	"healthboost" - The amount of extra HP each zombie will get in addition to that zombie's initial health
+//	"respawn" - If enabled, all zombies will be immediately respawn after death, when the day kill limit is
+//	          - reached, the remaining zombies dig into the ground and the next day will begin
+//                - Respawn is typically 0 for bosses
+//	"deaths_before_zombie" - How many deaths as human before being switched to the Zombie force (0: Disable)
+//	"fademin" - Distance, in game units, at which zombies start fading away ("" to disable)
+//	"fademax" - Distance, in game units, at which the zombie is fully invisible ("" to disable)
+//	"zombieoverride" - OPTIONAL: If specified only listed zombies will be spawned during this day, separate with "," (look in zombies.txt)
+//	"storyline" - OPTIONAL: If specified, the text will be printed on round_start for the day, used to illustrate some kind of story line
+
+
+"days"
+{
+	"They are coming!!"
+	{
+		"count"			"100"
+		"maxspawn"		"16"
+		"healthboost"		""
+		"respawn"		"1"
+		"deaths_before_zombie"	""
+		"fademin"		""
+		"fademax"		""
+		"zombieoverride" 	""
+	}
+
+	"What SBPL?"
+	{
+		"count"			"125"
+		"maxspawn"		"16"
+		"healthboost"		"25"
+		"respawn"		"1"
+		"deaths_before_zombie"	""
+		"fademin"		""
+		"fademax"		""
+		"zombieoverride" 	"SBPL"
+		"maxzm"			"16"
+	}
+
+	"I don't feel good..."
+	{
+		"count"			"1"
+		"maxspawn"		"1"
+		"healthboost"		"225"
+		"respawn"		"1"
+		"deaths_before_zombie"	""
+		"fademin"		""
+		"fademax"		""
+		"zombieoverride"	"HELL"
+		"maxzm"			"1"
+	}
+}

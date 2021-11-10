@@ -1,0 +1,18 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/player/custom_player/kodua/doom2016/hellknight/d"
+	"$bumpmap" "models/player/custom_player/kodua/doom2016/hellknight/n"
+
+	"$color2"	"[0 0 0]"
+	"$blendTintByBaseAlpha"	"1"
+
+	"$phong" "1"
+	"$phongexponenttexture" "models/player/custom_player/kodua/doom2016/hellknight/e"
+	"$phongfresnelranges"	"[1 5 25]"
+	"$phongboost"	".5"
+
+	"$rimlight" "1"
+	"$rimlightexponent" "33"
+	"$rimlightboost" "60"
+	"$rimmask" "1"
+}

@@ -1,0 +1,75 @@
+// ====================
+//     Zombie Riot
+//   File: downloads.txt
+//   Author: Greyscale
+// ====================
+//
+// Add files you want clients to download here
+//
+
+// team win overlays
+materials/overlays/zr/zombies_win.vtf
+materials/overlays/zr/zombies_win.vmt
+materials/overlays/zr/humans_win.vtf
+materials/overlays/zr/humans_win.vmt
+
+// zvision
+materials/overlays/zr/zvision.vtf
+materials/overlays/zr/zvision.vmt
+
+// -- GOZOMBIE
+
+materials/models/player/kuristaja/zombies/gozombie/csgo_zombie_skin.vmt
+materials/models/player/kuristaja/zombies/gozombie/csgo_zombie_normal.vtf
+
+// Player model
+models/player/kuristaja/zombies/gozombie/gozombie.dx90.vtx
+models/player/kuristaja/zombies/gozombie/gozombie.mdl
+models/player/kuristaja/zombies/gozombie/gozombie.phy
+models/player/kuristaja/zombies/gozombie/gozombie.vvd
+
+// SBPL
+materials/models/player/uuz/pl/c_black.vmt
+materials/models/player/uuz/pl/c_black.vtf
+materials/models/player/uuz/pl/c_color.vmt
+materials/models/player/uuz/pl/c_color.vtf
+materials/models/player/uuz/pl/c_puple.vmt
+materials/models/player/uuz/pl/c_puple.vtf
+materials/models/player/uuz/pl/c_red.vmt
+materials/models/player/uuz/pl/c_red.vtf
+materials/models/player/uuz/pl/c_white.vmt
+materials/models/player/uuz/pl/c_white.vtf
+
+models/player/uuz/pl/pl_fix3.dx90.vtx
+models/player/uuz/pl/pl_fix3.phy
+models/player/uuz/pl/pl_fix3.mdl
+models/player/uuz/pl/pl_fix3.vvd
+models/player/uuz/pl/pl_arms_fix.vvd
+models/player/uuz/pl/pl_arms_fix.mdl
+models/player/uuz/pl/pl_arms_fix.dx90.vtx
+
+// Hellknight
+models/player/custom_player/kodua/doom2016/hellknight_small.phy
+models/player/custom_player/kodua/doom2016/hellknight_small.vvd
+models/player/custom_player/kodua/doom2016/hellknight_small.dx90.vtx
+models/player/custom_player/kodua/doom2016/hellknight_arms.vvd
+models/player/custom_player/kodua/doom2016/hellknight_arms.dx90.vtx
+
+materials/models/player/custom_player/kodua/doom2016/hellknight/d.vtf
+materials/models/player/custom_player/kodua/doom2016/hellknight/e.vtf
+materials/models/player/custom_player/kodua/doom2016/hellknight/n.vtf
+materials/models/player/custom_player/kodua/doom2016/hellknight/hkt_main_d.vmt
+
+// Ambience Sound
+sound/ambient/zr/zr_ambience.mp3
+
+// CSGO Infect Sounds
+sound/zr/zombie_die1.mp3
+sound/zr/zombie_die2.mp3
+sound/zr/zombie_die3.mp3
+sound/zr/zombie_pain1.mp3
+sound/zr/zombie_pain2.mp3
+sound/zr/zombie_pain3.mp3
+sound/zr/zombie_pain4.mp3
+sound/zr/zombie_pain5.mp3
+sound/zr/zombie_pain6.mp3
