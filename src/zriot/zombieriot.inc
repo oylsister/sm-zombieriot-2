@@ -55,6 +55,16 @@ Handle tFreeze = INVALID_HANDLE;
 
 QueryCookie mat_dxlevel;
 
+int g_iDayleft;
+int g_iDayMapvote;
+
+bool g_bTriggerMapVote;
+bool g_bAlreadyVoted;
+
+int g_iCountdown[MAXPLAYERS+1];
+bool g_bClientProtected[MAXPLAYERS+1] = false;
+Handle g_fClientProtectTimer[MAXPLAYERS+1] = INVALID_HANDLE;
+
 void FindClientDXLevel(int client)
 {
     if (IsFakeClient(client))

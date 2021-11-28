@@ -39,6 +39,11 @@ enum struct ZRiotSettings
     Handle CVAR_ZMARKET_BUYZONE;
     Handle CVAR_CASHFILL;
     Handle CVAR_CASHAMOUNT;
+    Handle CVAR_TRIGGERMAPVOTE;
+    Handle CVAR_MAPVOTEDAYLEFT;
+    Handle CVAR_SPAWNPROTECT;
+    Handle CVAR_SPAWNPROTECTTIME;
+    Handle CVAR_SPAWNPROTECTSPEED;
 }
 
 ZRiotSettings gCvars;
@@ -76,6 +81,11 @@ void CreateCvars()
     gCvars.CVAR_ZMARKET_BUYZONE       =    CreateConVar("zriot_zmarket_buyzone", "0", "Must be in buyzone to access !zmarket, if Market is installed (0: Can be used anywhere)");
     gCvars.CVAR_CASHFILL              =    CreateConVar("zriot_cashfill", "1", "Enable the mod to set the players cash to zriot_cashamount (0: Disabled)");
     gCvars.CVAR_CASHAMOUNT            =    CreateConVar("zriot_cashamount", "12000", "How much money players will have when they spawn when zriot_cashfill is 1");
+    gCvars.CVAR_TRIGGERMAPVOTE        =    CreateConVar("zriot_triggermapvote", "1.0", "Trigger the mapvote before the map end for Zriot mode (0: Disable)");
+    gCvars.CVAR_MAPVOTEDAYLEFT        =    CreateConVar("zriot_mapvotedayleft", "2.0", "How many day left before map vote start");
+    gCvars.CVAR_SPAWNPROTECT          =    CreateConVar("zriot_spawnprotect", "1.0", "Enable Spawn Protection for human or not (0: Disable)");
+    gCvars.CVAR_SPAWNPROTECTTIME      =    CreateConVar("zriot_spawnprotecttime", "7.0", "How long that client will get immune from every damage before back to normal again");
+    gCvars.CVAR_SPAWNPROTECTSPEED     =    CreateConVar("zriot_spawnprotectspeed", "400.0", "How much speed that client will get after spawn before back to normal");
     
     HookConVarChange(gCvars.CVAR_ENABLE, EnableHook);
     

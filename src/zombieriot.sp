@@ -15,7 +15,7 @@
 #undef REQUIRE_PLUGIN
 #include <market>
 
-#define VERSION "2.0.3"
+#define VERSION "2.1.0"
 
 #pragma newdecls required
 
@@ -26,6 +26,7 @@ bool csgo = false;
 #include "zriot/cvars"
 #include "zriot/translation"
 #include "zriot/offsets"
+#include "zriot/spawnprotect"
 #include "zriot/ambience"
 #include "zriot/zombiedata"
 #include "zriot/daydata"
@@ -45,7 +46,7 @@ public Plugin myinfo =
     author = "Greyscale, Oylsister", 
     description = "Humans stick together to fight off zombie attacks", 
     version = VERSION, 
-    url = ""
+    url = "https://github.com/oylsister/sm-zombieriot-2"
 };
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
@@ -139,6 +140,9 @@ public void OnMapStart()
     FindMapSky();
     
     CheckMapConfig();
+
+    GetMapVoteConVars();
+    g_bAlreadyVoted = false;
 }
 
 public void OnConfigsExecuted()

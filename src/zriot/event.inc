@@ -6,6 +6,12 @@
  * ====================
  */
 
+void GetMapVoteConVars()
+{
+    g_iDayleft = GetConVarInt(gCvars.CVAR_MAPVOTEDAYLEFT);
+    g_bTriggerMapVote = GetConVarBool(gCvars.CVAR_TRIGGERMAPVOTE);
+}
+
 void HookEvents()
 {
     HookEvent("player_connect", PlayerConnect, EventHookMode_Pre);
@@ -120,6 +126,20 @@ public Action RoundStart(Handle event, const char[] name, bool dontBroadcast)
     RestartAmbience();
     
     ServerCommand("bot_knives_only");
+
+    if(g_bTriggerMapVote)
+    {
+        if(!g_bAlreadyVoted)
+        {
+            g_iDayleft = dCount - (gDay + 1);
+
+            if(g_iDayleft == g_iDayMapvote)
+            {
+                ServerCommand("sm_mapvote");
+                g_bAlreadyVoted = true;
+            }
+        }
+    }
     
     ZRiot_PrintToChat(0, "Round objective");
     
@@ -367,6 +387,12 @@ public Action PlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
             int cash = GetConVarInt(gCvars.CVAR_CASHAMOUNT);
             SetPlayerMoney(index, cash);
         }
+
+        bool protect = GetConVarBool(gCvars.CVAR_SPAWNPROTECT);
+        if(protect)
+        {
+            SpawnProtectOnClientSpawn(index);
+        }
         
         if (tZVision[index] != INVALID_HANDLE)
         {
@@ -501,6 +527,12 @@ public Action PlayerDeath(Handle event, const char[] name, bool dontBroadcast)
         
         RemoveTargeters(index);
         UpdateHUDAll();
+
+        bool protect = GetConVarBool(gCvars.CVAR_SPAWNPROTECT);
+        if(protect)
+        {
+            SpawnProtectOnClientDeath(index);
+        }
         
         if (GetLiveHumanCount() <= 0 && respawn)
         {

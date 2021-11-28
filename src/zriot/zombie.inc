@@ -132,7 +132,7 @@ void ZombiesWin()
 void HumansWin()
 {
     gDay++;
-        
+    
     if (gDay + 1 > dCount)
     {
         gDay = 0;
