@@ -6,3 +6,4 @@
 - Replaced the old function with Sourcemod API
 - Add CS:GO support
 - Specific max Zombie spawn in that day
+- Spawn Protection (New)
