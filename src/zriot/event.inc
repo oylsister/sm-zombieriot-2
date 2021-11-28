@@ -420,7 +420,12 @@ public Action PlayerHurt(Handle event, const char[] name, bool dontBroadcast)
     
     char weapon[32];
     GetEventString(event, "weapon", weapon, sizeof(weapon));
-    
+
+    if (g_bClientProtected[index])
+    {
+        return;
+    }
+
     if (!IsPlayerZombie(index))
     {
         return;
