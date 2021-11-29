@@ -83,7 +83,7 @@ public Action Command_SetDay(int client, int argc)
         return Plugin_Handled;
     }
     
-    TerminateRound(3.0, Round_Draw);
+    CS_TerminateRound(3.0, CSRoundEnd_Draw, true);
     
     return Plugin_Handled;
 }
@@ -117,7 +117,7 @@ public Action Command_Zombie(int client, int argc)
     
     if (GetLiveHumanCount() <= 0)
     {
-        TerminateRound(5.0, Terrorists_Win);
+        CS_TerminateRound(5.0, CSRoundEnd_TerroristWin, true);
     }
     
     return Plugin_Handled;

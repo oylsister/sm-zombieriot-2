@@ -209,7 +209,7 @@ public void OnClientDisconnect(int client)
     
     if (count <= 1 && tHUD != INVALID_HANDLE)
     {
-        TerminateRound(5.0, Terrorists_Win);
+        CS_TerminateRound(5.0, CSRoundEnd_TerroristWin, true);
     }
 }
 
@@ -238,7 +238,7 @@ void CheckMapConfig()
 
 void ZRiotEnd()
 {
-    TerminateRound(3.0, Game_Commencing);
+    CS_TerminateRound(3.0, CSRoundEnd_GameStart, true);
     
     SetHostname(hostname);
     

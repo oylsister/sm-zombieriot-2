@@ -170,9 +170,3 @@ stock void Util_RemovePlayerItem(int client, int weaponindex)
     RemovePlayerItem(client, weaponindex);
     RemoveEdict(weaponindex);
 }
-
-void TerminateRound(float delay, int reason)
-{
-    CSRoundEndReason iReason = view_as<CSRoundEndReason>(reason);
-    CS_TerminateRound(delay, iReason, true);
-}

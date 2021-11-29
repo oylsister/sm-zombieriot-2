@@ -133,7 +133,7 @@ public void EnableHook(Handle convar, const char[] oldValue, const char[] newVal
         
         gDay = 0;
         
-        TerminateRound(3.0, Game_Commencing);
+        CS_TerminateRound(3.0, CSRoundEnd_GameStart, true);
     }
     else
     {
