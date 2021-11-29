@@ -187,7 +187,7 @@ stock void AssignTeamAll(bool spawn)
     
     for (int x = 1; x <= MaxClients; x++)
     {
-        if (!IsClientInGame(x) || GetClientTeam(x) < CS_TEAM_T)
+        if (!IsClientInGame(x) || GetClientTeam(x) < CS_TEAM_T || IsClientSourceTV(x))
         {
             continue;
         }
