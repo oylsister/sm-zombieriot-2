@@ -29,6 +29,7 @@ void SpawnProtectOnClientSpawn(int client)
     float g_fSpawnSpeed = GetConVarFloat(gCvars.CVAR_SPAWNPROTECTSPEED);
 
     g_bClientProtected[client] = true;
+    SetEntProp(client, Prop_Data, "m_takedamage", 0, 1);
 
     if(g_fClientProtectTimer[client] == INVALID_HANDLE)
     {
@@ -77,6 +78,8 @@ public Action Timer_Protect(Handle timer, any client)
         g_fClientProtectTimer[client] = INVALID_HANDLE;
         ZRiot_PrintCenterText(client, "No Longer Protected");
         ZRiot_PrintToChat(client, "No Longer Protected");
+
+        SetEntProp(client, Prop_Data, "m_takedamage", 2, 1);
 
         return Plugin_Stop;
     }
