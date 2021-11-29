@@ -174,6 +174,11 @@ public Action RoundStart(Handle event, const char[] name, bool dontBroadcast)
         CloseHandle(tFreeze);
         tFreeze = INVALID_HANDLE;
     }
+
+    g_bRoundStart = true;
+
+    float timer = GetConVarFloat(gCvars.CVAR_FREEZE);
+    CreateTimer(timer, ResetStatus);
 }
 
 public Action RoundFreezeEnd(Handle event, const char[] name, bool dontBroadcast)
@@ -391,7 +396,10 @@ public Action PlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
         bool protect = GetConVarBool(gCvars.CVAR_SPAWNPROTECT);
         if(protect)
         {
-            SpawnProtectOnClientSpawn(index);
+            if(!g_bRoundStart)
+            {
+                SpawnProtectOnClientSpawn(index);
+            }
         }
         
         if (tZVision[index] != INVALID_HANDLE)
@@ -573,4 +581,10 @@ public Action PlayerJump(Handle event, const char[] name, bool dontBroadcast)
     vel[2] = GetZombieJump(gZombieID[index]);
     
     SetPlayerVelocity(index, vel);
+}
+
+public Action ResetStatus(Handle timer, any data)
+{
+    g_bRoundStart = false;
+    return Plugin_Handled;
 }

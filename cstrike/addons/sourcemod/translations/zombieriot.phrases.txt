@@ -196,4 +196,20 @@
 		"#format"	"{1:s}"
 		"en"		"Invalid file path: \"{1}\", check downloads.txt"
 	}
+
+	"Spawn Protect Timer"
+	{
+		"#format"	"{1:d}"
+		"en"		"Spawn Protect End in: {1} seconds"
+	}
+
+	"Still Protected"
+	{
+		"en"		"You're now having spawn protection, Running to the safe place!"
+	}
+
+	"No Longer Protected"
+	{
+		"en"		"You're no longer protected."
+	}
 }

@@ -22,7 +22,7 @@ void SpawnProtectOnClientSpawn(int client)
 
     if(g_fClientProtectTimer[client] != INVALID_HANDLE)
     {
-        KillTimer(g_fClientProtectTimer[client]);
+        g_fClientProtectTimer[client] = INVALID_HANDLE;
     }
 
     float g_fProtectTime = GetConVarFloat(gCvars.CVAR_SPAWNPROTECTTIME);
@@ -36,8 +36,8 @@ void SpawnProtectOnClientSpawn(int client)
     }
 
     g_iCountdown[client] = RoundToNearest(g_fProtectTime);
-    ZRiot_HudHint(client, "Spawn Protect End in: %i seconds", g_iCountdown[client]);
-    ZRiot_PrintToChat(client, "You're now having spawn protection, Running to the safe place!");
+    ZRiot_PrintCenterText(client, "Spawn Protect Timer", g_iCountdown[client]);
+    ZRiot_PrintToChat(client, "Still Protected");
 
     SetPlayerSpeed(client, g_fSpawnSpeed);
 }
@@ -67,7 +67,7 @@ public Action Timer_Protect(Handle timer, any client)
 
     g_iCountdown[client]--;
 
-    ZRiot_HudHint(client, "Spawn Protect End in: %i seconds", g_iCountdown[client]);
+    ZRiot_PrintCenterText(client, "Spawn Protect Timer", g_iCountdown[client]);
 
     if(g_iCountdown[client] <= 0)
     {
@@ -75,8 +75,8 @@ public Action Timer_Protect(Handle timer, any client)
         SetPlayerSpeed(client, DEFAULT_SPEED);
 
         g_fClientProtectTimer[client] = INVALID_HANDLE;
-        ZRiot_HudHint(client, "You're no longer protected.");
-        ZRiot_PrintToChat(client, "You're no longer protected.");
+        ZRiot_PrintCenterText(client, "No Longer Protected");
+        ZRiot_PrintToChat(client, "No Longer Protected");
 
         return Plugin_Stop;
     }

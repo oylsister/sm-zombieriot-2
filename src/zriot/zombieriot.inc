@@ -64,6 +64,7 @@ bool g_bAlreadyVoted;
 int g_iCountdown[MAXPLAYERS+1];
 bool g_bClientProtected[MAXPLAYERS+1] = false;
 Handle g_fClientProtectTimer[MAXPLAYERS+1] = INVALID_HANDLE;
+bool g_bRoundStart = true;
 
 void FindClientDXLevel(int client)
 {
