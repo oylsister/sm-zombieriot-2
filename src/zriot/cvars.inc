@@ -44,6 +44,9 @@ enum struct ZRiotSettings
     Handle CVAR_SPAWNPROTECT;
     Handle CVAR_SPAWNPROTECTTIME;
     Handle CVAR_SPAWNPROTECTSPEED;
+    Handle CVAR_DYNAMIC_ENABLE;
+    Handle CVAR_DYNAMIC_PLAYERRATIO;
+    Handle CVAR_MAXHUMANPLAYER;
 }
 
 ZRiotSettings gCvars;
@@ -86,6 +89,9 @@ void CreateCvars()
     gCvars.CVAR_SPAWNPROTECT          =    CreateConVar("zriot_spawnprotect", "1.0", "Enable Spawn Protection for human or not (0: Disable)");
     gCvars.CVAR_SPAWNPROTECTTIME      =    CreateConVar("zriot_spawnprotecttime", "7.0", "How long that client will get immune from every damage before back to normal again");
     gCvars.CVAR_SPAWNPROTECTSPEED     =    CreateConVar("zriot_spawnprotectspeed", "400.0", "How much speed that client will get after spawn before back to normal");
+    gCvars.CVAR_DYNAMIC_ENABLE        =    CreateConVar("zriot_dynamic_enable", "0.0", "Enable Dyanmic Zombie mode (Difficulty Dynamic) WARNING: This is still unstable.");
+    gCvars.CVAR_DYNAMIC_PLAYERRATIO   =    CreateConVar("zriot_dynamic_playerratio", "10.0", "Every n player the zombie will get buffed");
+    gCvars.CVAR_MAXHUMANPLAYER        =    CreateConVar("zriot_maxhumanplayer", "0.0", "Max Player that can join the server, Set this to 0 will allow every player can join the server and replace them as zombie.");
     
     HookConVarChange(gCvars.CVAR_ENABLE, EnableHook);
     

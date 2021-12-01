@@ -12,12 +12,15 @@ enum struct ZRiot_DayData
     char data_zombieoverride[32*MAXZOMBIES];
     char data_storyline[192];
     int data_count;
+    float data_count_ratio;
     int data_healthboost;
+    float data_hp_ratio;
     bool data_respawn;
     char data_deaths_before_zombie;
     float data_fademin;
     float data_fademax;
 	int data_maxzm;
+    float data_maxzm_ratio;
 }
 
 #define MAXDAYS 25
@@ -73,12 +76,15 @@ void LoadDayData(bool defaultconfig)
         strcopy(arrayDays[dCount].data_storyline, 192, storyline);
         
         arrayDays[dCount].data_count = KvGetNum(kvDays, "count", 25);
+        arrayDays[dCount].data_count_ratio = KvGetFloat(kvDays, "count_ratio", 1.0);
+        arrayDays[dCount].data_hp_ratio = KvGetFloat(kvDays, "hp_ratio", 1.0);
         arrayDays[dCount].data_healthboost = KvGetNum(kvDays, "healthboost");
         arrayDays[dCount].data_respawn = view_as<bool>(KvGetNum(kvDays, "respawn"));
         arrayDays[dCount].data_deaths_before_zombie = KvGetNum(kvDays, "deaths_before_zombie");
         arrayDays[dCount].data_fademin = KvGetFloat(kvDays, "fademin");
         arrayDays[dCount].data_fademax = KvGetFloat(kvDays, "fademax");
         arrayDays[dCount].data_maxzm = KvGetNum(kvDays, "maxzm", -1);
+        arrayDays[dCount].data_maxzm_ratio = KvGetFloat(kvDays, "maxzm_ratio", 1.0);
         
         dCount++;
     } while (KvGotoNextKey(kvDays));
@@ -139,7 +145,28 @@ void GetDayStoryLine(int day, char[] storyline, int len)
 
 int GetDayCount(int day)
 {
-    return arrayDays[day].data_count;
+    bool dynamic = GetConVarBool(gCvars.CVAR_DYNAMIC_ENABLE);
+
+    if(!dynamic)
+    {
+        return arrayDays[day].data_count;
+    }
+    else
+    {
+        float multi = GetDayCountRatio(day);
+        int total = RoundToNearest(arrayDays[day].data_count * Pow(multi, view_as<float>(g_activeratio)));
+        return total;
+    }
+}
+
+float GetDayCountRatio(int day)
+{
+    return arrayDays[day].data_count_ratio;
+}
+
+float GetDayHPRatio(int day)
+{
+    return arrayDays[day].data_hp_ratio;
 }
 
 int GetDayHealthBoost(int day)
@@ -169,7 +196,38 @@ float GetDayMaxFade(int day)
 
 int GetDayMaxZM(int day)
 {
-    return arrayDays[day].data_maxzm;
+    bool dynamic = GetConVarBool(gCvars.CVAR_DYNAMIC_ENABLE);
+
+    if(!dynamic)
+    {
+        return arrayDays[day].data_maxzm;
+    }
+    else
+    {
+        float multi = GetDayMaxZMRatio(day);
+        int total = RoundToNearest(arrayDays[day].data_maxzm * Pow(multi, view_as<float>(g_activeratio)));
+
+        int maxplayer = GetConVarInt(gCvars.CVAR_MAXHUMANPLAYER);
+        if(maxplayer <= 0)
+        {
+            total = 32;
+        }
+
+        else
+        {
+            if(total > 64 - maxplayer)
+            {
+                total = 64 - maxplayer;
+            }
+        }
+
+        return total;
+    }
+}
+
+float GetDayMaxZMRatio(int day)
+{
+    return arrayDays[day].data_maxzm_ratio;
 }
 
 void BeginDay()

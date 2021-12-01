@@ -16,20 +16,22 @@
 {
 	"They are coming!!"
 	{
-		"count"			"100"
-		"maxspawn"		"16"
-		"healthboost"		""
-		"respawn"		"1"
-		"deaths_before_zombie"	""
+		"count"			"100" // Total ZM To be eliminated
+		"count_ratio"		"1.5" // Ratio for extra ZM to be eliminated
+		"hp_ratio"		"1.3" // Ratio for extra hp ZM will get
+		"healthboost"		""    // Extra HP for ZM
+		"respawn"		"1"   // Allow Respawn
+		"deaths_before_zombie"	""    // How many time that player can respawn as Human before they will be spawned as a zombie
 		"fademin"		""
 		"fademax"		""
-		"zombieoverride" 	""
+		"zombieoverride" 	""    // Zombie name to be used for this round
+		"maxzm"			"16"  // How many zombie can be spawned in the same time
+		"maxzm_ratio"		"1.5" // Ratio for Max ZM can Spawn 
 	}
 
 	"What SBPL?"
 	{
 		"count"			"125"
-		"maxspawn"		"16"
 		"healthboost"		"25"
 		"respawn"		"1"
 		"deaths_before_zombie"	""
@@ -42,7 +44,6 @@
 	"I don't feel good..."
 	{
 		"count"			"1"
-		"maxspawn"		"1"
 		"healthboost"		"225"
 		"respawn"		"1"
 		"deaths_before_zombie"	""

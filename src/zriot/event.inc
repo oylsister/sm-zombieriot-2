@@ -175,6 +175,29 @@ public Action RoundStart(Handle event, const char[] name, bool dontBroadcast)
         tFreeze = INVALID_HANDLE;
     }
 
+    bool dynamic = GetConVarBool(gCvars.CVAR_DYNAMIC_ENABLE);
+
+    if(dynamic)
+    {
+        int humancount = 0;
+
+        for(int x = 1; x <= MaxClients; x++)
+        {
+            if(IsPlayerAlive(x) && IsPlayerHuman(x))
+            {
+                humancount++;
+            }
+        }
+
+        float player_ratio = GetConVarFloat(gCvars.CVAR_DYNAMIC_PLAYERRATIO);
+        g_activeratio = RoundToNearest(view_as<float>(humancount) / player_ratio);
+
+        if(g_activeratio <= 0)
+        {
+            g_activeratio = 1;
+        }
+    }
+
     g_bRoundStart = true;
 
     float timer = GetConVarFloat(gCvars.CVAR_FREEZE);

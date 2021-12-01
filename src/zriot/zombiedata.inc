@@ -256,9 +256,21 @@ void GetZombieZVision(int zombieid, char[] zvision, int maxlen)
 
 void ApplyZombieHealth(int client, int zombieid)
 {
+    bool dynamic = GetConVarBool(gCvars.CVAR_DYNAMIC_ENABLE);
+
     if (IsValidZombieID(zombieid))
     {
-        SetEntityHealth(client, arrayZombies[zombieid].data_health);
+        if(!dynamic)
+        {
+            SetEntityHealth(client, arrayZombies[zombieid].data_health);
+        }
+        else
+        {
+            float multi = GetDayHPRatio(gDay);
+            int total = RoundToNearest(arrayZombies[zombieid].data_health * Pow(multi, view_as<float>(g_activeratio)));
+
+            SetEntityHealth(client, total);
+        }
     }
 }
 

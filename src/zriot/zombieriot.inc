@@ -61,6 +61,11 @@ int g_iDayMapvote;
 bool g_bTriggerMapVote;
 bool g_bAlreadyVoted;
 
+int g_iMaxPlayer;
+int g_iTotalPlayer;
+
+int g_activeratio = 1;
+
 int g_iCountdown[MAXPLAYERS+1];
 bool g_bClientProtected[MAXPLAYERS+1] = false;
 Handle g_fClientProtectTimer[MAXPLAYERS+1] = INVALID_HANDLE;
