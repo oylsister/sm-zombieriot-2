@@ -58,11 +58,14 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 
 public void OnPluginStart()
 {
-    if (GetEngineVersion() != Engine_CSS)
+    if (GetEngineVersion() == Engine_CSS)
+        csgo = false;
+
+    else if (GetEngineVersion() == Engine_CSGO)
         csgo = true;
 
     else
-        csgo = false;
+        LogError("Warning: Zombie Riot only support CSS and CSGO!");
 
     LoadTranslations("common.phrases.txt");
     LoadTranslations("zombieriot.phrases.txt");
