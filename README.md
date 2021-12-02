@@ -7,3 +7,5 @@
 - Add CS:GO support
 - Specific max Zombie spawn in that day
 - Spawn Protection (New)
+- Dynamic Difficulty (Experimental)
+- Specific Max Human Player (New) 
