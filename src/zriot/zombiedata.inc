@@ -6,10 +6,13 @@
  * ==================== 
  */
 
+char DEFAULT_ARMS[] = "models/weapons/ct_arms_gign.mdl";
+
 enum struct ZRiot_ZombieData
 {
     char data_name[32];
     char data_model[256];
+    char data_armsmodel[256];
     char data_zvision[256];
     bool data_override_required;
     int data_health;
@@ -86,6 +89,7 @@ void LoadZombieData(bool defaultconfig)
     char name[64];
     char type[32];
     char model[256];
+    char arms_model[256];
     char zvision[256];
     
     zCount = 0;
@@ -100,6 +104,9 @@ void LoadZombieData(bool defaultconfig)
         
         KvGetString(kvZombies, "model", model, sizeof(model));
         strcopy(arrayZombies[zCount].data_model, 256, model);
+
+        KvGetString(kvZombies, "arms_model", arms_model, sizeof(arms_model));
+        strcopy(arrayZombies[zCount].data_armsmodel, 256, arms_model);
         
         KvGetString(kvZombies, "zvision", zvision, sizeof(zvision));
         strcopy(arrayZombies[zCount].data_zvision, 256, zvision);
@@ -246,6 +253,40 @@ void ApplyZombieModel(int client, int zombieid)
     }
 }
 
+void ApplyZombieArms(int client, int zombieid)
+{
+    if (IsValidZombieID(zombieid))
+    {
+        int zombieclient = GetClientUserId(client);
+        char model[256];
+        strcopy(model, sizeof(model), arrayZombies[zombieid].data_armsmodel);
+
+        if(model[0] == '\0')
+        {
+            Format(model, sizeof(model), "%s", DEFAULT_ARMS);
+        }
+        
+        PrecacheModel(model);
+        int activeweapon = GetEntPropEnt(zombieclient, Prop_Send, "m_hActiveWeapon");
+        if(activeweapon != -1)
+        {
+            SetEntPropEnt(zombieclient, Prop_Send, "m_hActiveWeapon", -1);
+
+            DataPack pack;
+            CreateDataTimer(0.1, SetZombieArms, pack);
+            pack.WriteCell(zombieclient);
+            pack.WriteCell(activeweapon);
+            pack.WriteString(model);
+        }
+        int ent = GetEntPropEnt(zombieclient, Prop_Send, "m_hMyWearables");
+        if(ent != -1)
+        {
+            AcceptEntityInput(ent, "KillHierarchy");
+        }
+        SetEntPropString(zombieclient, Prop_Send, "m_szArmsModel", model);
+    }
+}
+
 void GetZombieZVision(int zombieid, char[] zvision, int maxlen)
 {
     if (IsValidZombieID(zombieid))
@@ -306,4 +347,24 @@ void ApplyZombieFOV(int client, int zombieid)
     {
         SetPlayerFOV(client, arrayZombies[zombieid].data_fov);
     }
+}
+
+public Action SetZombieArms(Handle timer, DataPack pack)
+{
+    char model[256];
+    ResetPack(pack);
+
+    int clientIndex = pack.ReadCell();
+    int activeweapon = pack.ReadCell();
+    pack.ReadString(model, 256);
+
+    if(IsClientInGame(clientIndex))
+    {
+        SetEntPropString(clientIndex, Prop_Send, "m_szArmsModel", model);
+        if(IsValidEntity(activeweapon)) 
+        {
+            SetEntPropEnt(clientIndex, Prop_Send, "m_hActiveWeapon", activeweapon);
+        }
+    }
+    return Plugin_Handled;
 }

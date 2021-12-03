@@ -98,6 +98,7 @@ void Zombify(int client, int zombieid)
     }
     
     ApplyZombieModel(client, zombieid);
+    ApplyZombieArms(client, zombieid);
     ApplyZombieHealth(client, zombieid);
     ApplyZombieSpeed(client, zombieid);
     ApplyZombieGravity(client, zombieid);
