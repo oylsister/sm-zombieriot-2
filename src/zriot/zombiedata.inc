@@ -10,7 +10,6 @@ enum struct ZRiot_ZombieData
 {
     char data_name[32];
     char data_model[256];
-    char data_armsmodel[256];
     char data_zvision[256];
     bool data_override_required;
     int data_health;
@@ -87,7 +86,6 @@ void LoadZombieData(bool defaultconfig)
     char name[64];
     char type[32];
     char model[256];
-    char arms_model[256];
     char zvision[256];
     
     zCount = 0;
@@ -102,9 +100,6 @@ void LoadZombieData(bool defaultconfig)
         
         KvGetString(kvZombies, "model", model, sizeof(model));
         strcopy(arrayZombies[zCount].data_model, 256, model);
-
-        KvGetString(kvZombies, "arms_model", arms_model, sizeof(arms_model));
-        strcopy(arrayZombies[zCount].data_armsmodel, 256, arms_model);
         
         KvGetString(kvZombies, "zvision", zvision, sizeof(zvision));
         strcopy(arrayZombies[zCount].data_zvision, 256, zvision);
