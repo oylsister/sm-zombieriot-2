@@ -98,10 +98,6 @@ void Zombify(int client, int zombieid)
     }
     
     ApplyZombieModel(client, zombieid);
-
-    if(csgo)
-        ApplyZombieArms(client, zombieid);
-        
     ApplyZombieHealth(client, zombieid);
     ApplyZombieSpeed(client, zombieid);
     ApplyZombieGravity(client, zombieid);

@@ -6,8 +6,6 @@
  * ==================== 
  */
 
-char DEFAULT_ARMS[] = "models/weapons/ct_arms_gign.mdl";
-
 enum struct ZRiot_ZombieData
 {
     char data_name[32];
@@ -253,40 +251,6 @@ void ApplyZombieModel(int client, int zombieid)
     }
 }
 
-void ApplyZombieArms(int client, int zombieid)
-{
-    if (IsValidZombieID(zombieid))
-    {
-        int zombieclient = GetClientUserId(client);
-        char model[256];
-        strcopy(model, sizeof(model), arrayZombies[zombieid].data_armsmodel);
-
-        if(model[0] == '\0')
-        {
-            Format(model, sizeof(model), "%s", DEFAULT_ARMS);
-        }
-        
-        PrecacheModel(model);
-        int activeweapon = GetEntPropEnt(zombieclient, Prop_Send, "m_hActiveWeapon");
-        if(activeweapon != -1)
-        {
-            SetEntPropEnt(zombieclient, Prop_Send, "m_hActiveWeapon", -1);
-
-            DataPack pack;
-            CreateDataTimer(0.1, SetZombieArms, pack);
-            pack.WriteCell(zombieclient);
-            pack.WriteCell(activeweapon);
-            pack.WriteString(model);
-        }
-        int ent = GetEntPropEnt(zombieclient, Prop_Send, "m_hMyWearables");
-        if(ent != -1)
-        {
-            AcceptEntityInput(ent, "KillHierarchy");
-        }
-        SetEntPropString(zombieclient, Prop_Send, "m_szArmsModel", model);
-    }
-}
-
 void GetZombieZVision(int zombieid, char[] zvision, int maxlen)
 {
     if (IsValidZombieID(zombieid))
@@ -347,24 +311,4 @@ void ApplyZombieFOV(int client, int zombieid)
     {
         SetPlayerFOV(client, arrayZombies[zombieid].data_fov);
     }
-}
-
-public Action SetZombieArms(Handle timer, DataPack pack)
-{
-    char model[256];
-    ResetPack(pack);
-
-    int clientIndex = pack.ReadCell();
-    int activeweapon = pack.ReadCell();
-    pack.ReadString(model, 256);
-
-    if(IsClientInGame(clientIndex))
-    {
-        SetEntPropString(clientIndex, Prop_Send, "m_szArmsModel", model);
-        if(IsValidEntity(activeweapon)) 
-        {
-            SetEntPropEnt(clientIndex, Prop_Send, "m_hActiveWeapon", activeweapon);
-        }
-    }
-    return Plugin_Handled;
 }
