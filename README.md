@@ -13,4 +13,4 @@ Plugin update based on original: https://forums.alliedmods.net/showthread.php?p=
 - Specific max Zombie spawn in that day
 - Spawn Protection (New)
 - Dynamic Difficulty (Experimental)
-- Specific Max Human Player (New) 
+- ~~Specific Max Human Player (New)~~ Removed
