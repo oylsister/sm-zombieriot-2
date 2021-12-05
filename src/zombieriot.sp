@@ -213,6 +213,9 @@ public void OnClientDisconnect(int client)
     if (count <= 1 && tHUD != INVALID_HANDLE)
     {
         CS_TerminateRound(5.0, CSRoundEnd_TerroristWin, true);
+
+        int score = CS_GetTeamScore(CS_TEAM_T);
+        CS_SetTeamScore(CS_TEAM_T, score++);
     }
 }
 

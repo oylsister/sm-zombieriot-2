@@ -118,6 +118,9 @@ public Action Command_Zombie(int client, int argc)
     if (GetLiveHumanCount() <= 0)
     {
         CS_TerminateRound(5.0, CSRoundEnd_TerroristWin, true);
+
+        int score = CS_GetTeamScore(CS_TEAM_T);
+        CS_SetTeamScore(CS_TEAM_T, score++);
     }
     
     return Plugin_Handled;

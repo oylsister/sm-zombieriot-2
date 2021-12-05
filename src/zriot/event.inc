@@ -543,6 +543,9 @@ public Action PlayerDeath(Handle event, const char[] name, bool dontBroadcast)
         if (gZombiesKilled >= GetDayCount(gDay) && respawn)
         {
             CS_TerminateRound(5.0, CSRoundEnd_CTWin, true);
+
+            int score = CS_GetTeamScore(CS_TEAM_CT);
+            CS_SetTeamScore(CS_TEAM_CT, score++);
         }
     }
     else
@@ -573,6 +576,9 @@ public Action PlayerDeath(Handle event, const char[] name, bool dontBroadcast)
         if (GetLiveHumanCount() <= 0 && respawn)
         {
             CS_TerminateRound(5.0, CSRoundEnd_TerroristWin, true);
+
+            int score = CS_GetTeamScore(CS_TEAM_T);
+            CS_SetTeamScore(CS_TEAM_T, score++);
         }
     }
     
