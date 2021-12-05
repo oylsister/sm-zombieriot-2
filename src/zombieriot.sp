@@ -130,9 +130,6 @@ public void OnLibraryAdded(const char[] name)
 
 public void OnMapStart()
 {
-    g_iMaxPlayer = GetConVarInt(gCvars.CVAR_MAXHUMANPLAYER);
-    g_iTotalPlayer = 0;
-
     MapChangeCleanup();
     
     LoadModelData();
@@ -196,31 +193,10 @@ public void OnClientPutInServer(int client)
     ClientHookUse(client);
     
     FindClientDXLevel(client);
-
-    if(!fakeclient)
-    {
-        g_iTotalPlayer++;
-    }
-}
-
-public bool OnClientConnect(int client, char[] rejectmsg, int maxlen)
-{
-    if(g_iMaxPlayer != 0 && g_iTotalPlayer >= g_iMaxPlayer)
-    {
-        Format(rejectmsg, maxlen, "[ZRiot] Maximum Human Player has been reached. (Max: %i)", g_iMaxPlayer);
-        return false;
-    }
-    
-    return true;
 }
 
 public void OnClientDisconnect(int client)
 {
-    if(!IsFakeClient(client))
-    {
-        g_iTotalPlayer--;
-    }
-
     if (!IsPlayerHuman(client))
         return;
     

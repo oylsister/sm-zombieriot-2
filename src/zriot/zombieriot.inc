@@ -61,9 +61,6 @@ int g_iDayMapvote;
 bool g_bTriggerMapVote;
 bool g_bAlreadyVoted;
 
-int g_iMaxPlayer;
-int g_iTotalPlayer;
-
 int g_activeratio = 1;
 
 int g_iCountdown[MAXPLAYERS+1];
