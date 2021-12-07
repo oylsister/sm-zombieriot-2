@@ -154,8 +154,17 @@ int GetDayCount(int day)
     else
     {
         float multi = GetDayCountRatio(day);
-        int total = RoundToNearest(arrayDays[day].data_count * Pow(multi, view_as<float>(g_activeratio)));
-        return total;
+
+        if(multi <= 1.0)
+        {
+            return arrayDays[day].data_count;
+        }
+
+        else
+        {
+            int total = RoundToNearest(arrayDays[day].data_count * Pow(multi, float(g_activeratio)));
+            return total;
+        }
     }
 }
 
@@ -205,23 +214,22 @@ int GetDayMaxZM(int day)
     else
     {
         float multi = GetDayMaxZMRatio(day);
-        int total = RoundToNearest(arrayDays[day].data_maxzm * Pow(multi, view_as<float>(g_activeratio)));
-
-        int maxplayer = GetConVarInt(gCvars.CVAR_MAXHUMANPLAYER);
-        if(maxplayer <= 0)
+        
+        if(multi <= 1.0)
         {
-            total = 32;
+            return arrayDays[day].data_maxzm;
         }
 
         else
         {
-            if(total > 64 - maxplayer)
-            {
-                total = 64 - maxplayer;
-            }
-        }
+            int total = RoundToNearest(arrayDays[day].data_maxzm * Pow(multi, float(g_activeratio)));
 
-        return total;
+            if(total > 32)
+            {
+                total = 32;
+            }
+            return total;
+        }
     }
 }
 

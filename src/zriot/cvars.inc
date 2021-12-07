@@ -46,7 +46,6 @@ enum struct ZRiotSettings
     Handle CVAR_SPAWNPROTECTSPEED;
     Handle CVAR_DYNAMIC_ENABLE;
     Handle CVAR_DYNAMIC_PLAYERRATIO;
-    Handle CVAR_MAXHUMANPLAYER;
 }
 
 ZRiotSettings gCvars;
