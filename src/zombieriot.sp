@@ -11,11 +11,12 @@
 #include <sdktools>
 #include <sdkhooks>
 #include <cstrike>
+#include <clientprefs>
 
 #undef REQUIRE_PLUGIN
 #include <market>
 
-#define VERSION "2.1.0"
+#define VERSION "2.1.1"
 
 #pragma newdecls required
 
@@ -29,6 +30,7 @@ bool csgo = false;
 #include "zriot/spawnprotect"
 #include "zriot/ambience"
 #include "zriot/zombiedata"
+#include "zriot/humandata"
 #include "zriot/daydata"
 #include "zriot/targeting"
 #include "zriot/overlays"
