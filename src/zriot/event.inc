@@ -416,6 +416,8 @@ public Action PlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
             SetPlayerMoney(index, cash);
         }
 
+        CreateTimer(0.2, HumanSpawnPost, index);
+
         bool protect = GetConVarBool(gCvars.CVAR_SPAWNPROTECT);
         if(protect)
         {
@@ -601,15 +603,21 @@ public Action PlayerJump(Handle event, const char[] name, bool dontBroadcast)
 {
     int index = GetClientOfUserId(GetEventInt(event, "userid"));
     
-    if (!IsPlayerZombie(index))
+    if (IsPlayerZombie(index))
     {
-        return;
+        float vel[3] = {0.0, 0.0, 0.0};
+        vel[2] = GetZombieJump(gZombieID[index]);
+    
+        SetPlayerVelocity(index, vel);
     }
+
+    else if(IsPlayerHuman(index))
+    {
+        float vel[3] = {0.0, 0.0, 0.0};
+        vel[2] = GetHumanJump(g_iSelectedClass[index]);
     
-    float vel[3] = {0.0, 0.0, 0.0};
-    vel[2] = GetZombieJump(gZombieID[index]);
-    
-    SetPlayerVelocity(index, vel);
+        SetPlayerVelocity(index, vel);
+    }
 }
 
 public Action ResetStatus(Handle timer, any data)

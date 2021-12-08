@@ -35,6 +35,7 @@ bool csgo = false;
 #include "zriot/targeting"
 #include "zriot/overlays"
 #include "zriot/zombie"
+#include "zriot/human"
 #include "zriot/hud"
 #include "zriot/sayhooks"
 #include "zriot/teamcontrol"
@@ -91,6 +92,7 @@ public void OnPluginStart()
     FindOffsets();
     InitTeamControl();
     InitWeaponRestrict();
+    HumanClassInit();
     
     // ======================================================================
     
@@ -107,6 +109,14 @@ public void OnPluginStart()
     // ======================================================================
     
     ZRiot_PrintToServer("Plugin loaded");
+
+    for(int x = 1; x <= MaxClients; x++)
+    {
+        if(AreClientCookiesCached(x))
+        {
+            OnClientCookiesCached(x);
+        }
+    }
 }
 
 public void OnPluginEnd()
@@ -141,6 +151,7 @@ public void OnMapStart()
     
     LoadZombieData(true);
     LoadDayData(true);
+    LoadHumanData(true);
     
     FindMapSky();
     
@@ -219,6 +230,11 @@ public void OnClientDisconnect(int client)
         int score = CS_GetTeamScore(CS_TEAM_T);
         CS_SetTeamScore(CS_TEAM_T, score++);
     }
+}
+
+public void OnClientCookiesCached(int client)
+{
+    HumanClassOnCookiesCahced(client);
 }
 
 void MapChangeCleanup()

@@ -14,7 +14,6 @@ enum struct ZRiot_HumanData
     bool human_default;
     char human_model[256];
     char human_arms[256]; // csgo only
-    char human_hvision[256];
     int human_health;
     float human_speed;
     float human_gravity;
@@ -24,10 +23,6 @@ enum struct ZRiot_HumanData
 }
 
 #define MAXHUMAN 25
-
-Handle g_hHumanClassCookie = INVALID_HANDLE;
-
-int g_iSelectedClass[MAXPLAYERS+1];
 
 Handle kvHumans = INVALID_HANDLE;
 
@@ -68,7 +63,6 @@ void LoadHumanData(bool defaultconfig)
     char sDefault[32];
     char model[256];
     char arms[256];
-    char hvision[256];
     char adminflags[64];
 
     hCount = 0;
@@ -85,16 +79,13 @@ void LoadHumanData(bool defaultconfig)
         strcopy(arrayHumans[hCount].human_description, 128, desc);
 
         KvGetString(kvHumans, "default_class", sDefault, sizeof(sDefault));
-        arrayHumans[hCount].human_default = = GetEnableDataBool(sDefault);
+        arrayHumans[hCount].human_default = GetEnableDataBool(sDefault);
 
         KvGetString(kvHumans, "model", model, sizeof(model));
         strcopy(arrayHumans[hCount].human_model, 256, model);
 
         KvGetString(kvHumans, "arms", arms, sizeof(arms));
         strcopy(arrayHumans[hCount].human_arms, 256, arms);
-
-        KvGetString(kvHumans, "hvision", hvision, sizeof(hvision));
-        strcopy(arrayHumans[hCount].human_hvision, 256, hvision);
 
         arrayHumans[hCount].human_health = KvGetNum(kvHumans, "health", 100);
 
@@ -136,11 +127,6 @@ bool IsValidHumanID(int humanid)
     return false;
 }
 
-public Action HumanSpawnPost(Handle timer, any client)
-{
-    return Plugin_Handled;
-}
-
 void ApplyHumanModel(int client, int humanid)
 {
     if(IsValidHumanID(humanid))
@@ -150,7 +136,7 @@ void ApplyHumanModel(int client, int humanid)
 
         if(!StrEqual(model, "default", false) || model[0] == '\0')
         {
-            PrecacheModel(model)
+            PrecacheModel(model);
             SetEntityModel(client, model);
         }
     }
@@ -170,7 +156,7 @@ void ApplyHumanArms(int client, int humanid)
 
         if(!StrEqual(model, "default", false) || model[0] == '\0')
         {
-            PrecacheModel(model)
+            PrecacheModel(model);
 
             int arms = GetEntProp(client, Prop_Send, "m_hMyWearables");
             if(arms != -1)
@@ -180,14 +166,6 @@ void ApplyHumanArms(int client, int humanid)
 
             SetEntPropString(client, Prop_Send, "m_szArmsModel", model);
         }
-    }
-}
-
-void GetHumanHVision(int humanid, char[] hvision, int maxlen)
-{
-    if(IsValidHumanID(humanid))
-    {
-        strcopy(hvision, maxlen, arrayHumans[humanid].human_hvision);
     }
 }
 
@@ -233,49 +211,16 @@ void ApplyHumanFOV(int client, int humanid)
     }
 }
 
-void HumanClassInit()
+void GetHumanDefaultClass(char[] name, int maxlen)
 {
-    if(g_hHumanClassCookie == INVALID_HANDLE)
-    {
-        g_hHumanClassCookie = RegClientCookie("zriot_humanclass", "[ZRiot] Human Class Cookies", CookieAccess_Protected);
-    }
-}
-
-void HumanClassOnCookiesCahced(int client)
-{
-    char sBuffer[32];
-    GetClientCookie(client, g_hHumanClassCookie, sBuffer, sizeof(sBuffer));
-
-    if(sBuffer[0] != '\0')
-    {
-        g_iSelectedClass[client] = FindHumanIDByName(sBuffer);
-    }
-    else
-    {
-        char sDefault[64];
-        GetHumanDefaultClass(sDefault, sizeof(sDefault));
-
-        g_iSelectedClass[client] = FindHumanIDByName(sDefault);
-        SaveHumanClassCookie(client, g_iSelectedClass[client]);
-    }
-}
-
-void GetHumanDefaultClass(const char[] name, int maxlen)
-{
-    for (int x = 0; x < hCount; h++)
+    for (int x = 0; x < hCount; x++)
     {
         if(arrayHumans[x].human_default)
         {
             strcopy(name, maxlen, arrayHumans[x].human_name);
+            return;
         }
     }
-}
-
-void SaveHumanClassCookie(int client, int humanid)
-{
-    char sCookie[64];
-    FormatEx(sCookie, sizeof(sCookie), "%d", g_iSelectedClass[client]);
-    SetClientCookie(client, g_hHumanClassCookie, sCookie);
 }
 
 bool GetEnableDataBool(const char[] text)
@@ -287,7 +232,7 @@ bool GetEnableDataBool(const char[] text)
 
     else if(StrEqual(text, "no", false))
     {
-        return false
+        return false;
     }
 
     return false;
