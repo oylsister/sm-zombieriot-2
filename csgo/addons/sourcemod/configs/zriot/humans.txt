@@ -1,0 +1,55 @@
+// ====================
+//     Zombie Riot
+//   File: humans.txt
+//   Author: Greyscale
+// ====================
+//
+// Here you can pre-define the different zombies and their abilities
+// Format:
+//
+// "strong" - Any word(s) to help keep track of the different human
+//	"enable" - "yes" will allow player to choose this specific class
+//	"description" - Describe abilities of this class
+//	"default_class" - "yes" will set this as player class on when they connect for the first time
+//	"model"	- Path to the model for player to use (NO .mdl extension)
+//	"arms" - Path to the arms model for player to use (CS:GO Only)
+//	"health" - Spawn HP of this human class
+//	"speed" - Speed of the human (Default: 300)
+//	"gravity" - Gravity of the human (0.5: Half, 1.0: Default, 2.0: Double)
+//	"jump" - Extra jump power that the human will receive (recommended you lower the gravity as you raise this)
+//	"fov" - Field of vision (Default: 90)
+//	"sm_flags" - Admin Sourcemod flag for this class
+
+
+"humans"
+{
+	"Normal Human"
+	{
+		"enable"	"yes"
+		"description"	"Normal Human Class"
+		"default_class"	"yes"
+		"model"		"default"
+		"arms"		"default"
+		"health"	"100"
+		"speed"		"300"
+		"gravity"	"1.0"
+		"jump"		"10.0"
+		"fov"		"90"
+		"sm_flags"	""
+	}
+
+	"VIP Class"
+	{
+		"enable"	"yes"
+		"description"	"|Speed + | Jump +|"
+		"default_class"	"no"
+		"model"		"default"
+		"arms"		"default"
+		"health"	"150"
+		"speed"		"340"
+		"gravity"	"1.0"
+		"jump"		"15.0"
+		"fov"		"90"
+		"sm_flags"	"ao"
+	}
+}

@@ -406,9 +406,6 @@ public Action PlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
         SetPlayerMinDist(index, 0.0);
         SetPlayerMaxDist(index, 0.0);
         
-        SetPlayerFOV(index, DEFAULT_FOV);
-        SetEntityGravity(index, DEFAULT_GRAVITY);
-        
         bool cashfill = GetConVarBool(gCvars.CVAR_CASHFILL);
         if (cashfill)
         {

@@ -211,16 +211,25 @@ void ApplyHumanFOV(int client, int humanid)
     }
 }
 
-void GetHumanDefaultClass(char[] name, int maxlen)
+int GetHumanDefaultClass(char[] name, int maxlen)
 {
     for (int x = 0; x < hCount; x++)
     {
         if(arrayHumans[x].human_default)
         {
-            strcopy(name, maxlen, arrayHumans[x].human_name);
-            return;
+            return strcopy(name, maxlen, arrayHumans[x].human_name);
         }
     }
+    return -1;
+}
+
+int GetHumanAdminFlag(int humanid, char[] buffer, int maxlen)
+{
+    if(IsValidHumanID(humanid))
+    {
+        return strcopy(buffer, maxlen, arrayHumans[humanid].human_adminflags);
+    }
+    return -1;
 }
 
 bool GetEnableDataBool(const char[] text)
