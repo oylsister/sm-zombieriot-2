@@ -11,6 +11,7 @@ Plugin update based on original: https://forums.alliedmods.net/showthread.php?p=
 - Replaced the old function with Sourcemod API
 - Add CS:GO support
 - Specific max Zombie spawn in that day
-- Spawn Protection (New)
+- Spawn Protection
 - Dynamic Difficulty (Experimental)
+- Human Class (NEW)
 - ~~Specific Max Human Player (New)~~ Removed
