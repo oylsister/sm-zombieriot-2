@@ -17,6 +17,8 @@ void CreateGlobals()
     CreateNative("ZRiot_Human", Native_Human);
     CreateNative("ZRiot_GetZombieTeam", Native_GetZombieTeam);
     CreateNative("ZRiot_GetHumanTeam", Native_GetHumanTeam);
+    CreateNative("ZRiot_GetClientHumanClass", Native_GetClientHumanClass);
+    CreateNative("ZRiot_GetClientZombieClasss", Native_GetClientZombieClass);
     
     hOnClientZombie = CreateGlobalForward("ZRiot_OnClientZombie", ET_Ignore, Param_Cell);
     hOnClientHuman = CreateGlobalForward("ZRiot_OnClientHuman", ET_Ignore, Param_Cell);
@@ -61,4 +63,27 @@ public int Native_Human(Handle plugin, int argc)
         ThrowNativeError(SP_ERROR_INDEX, "Bots cannot be moved to the human team");
     
     ZRiot_Human(client);
+}
+
+public int Native_GetClientHumanClass(Handle plugin, int argc)
+{
+    int client = GetNativeCell(1);
+
+    if (!client)
+        ThrowNativeError(SP_ERROR_INDEX, "Client index %d is not in the game", client);
+    
+    if (IsFakeClient(client))
+        ThrowNativeError(SP_ERROR_INDEX, "Bots cannot be moved to the human team");
+
+    return g_iSelectedClass[client];
+}
+
+public int Native_GetClientZombieClass(Handle plugin, int argc)
+{
+    int client = GetNativeCell(1);
+
+    if (!client)
+        ThrowNativeError(SP_ERROR_INDEX, "Client index %d is not in the game", client);
+
+    return gZombieID[client];
 }

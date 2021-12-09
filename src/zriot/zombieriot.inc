@@ -68,6 +68,12 @@ bool g_bClientProtected[MAXPLAYERS+1] = false;
 Handle g_fClientProtectTimer[MAXPLAYERS+1] = INVALID_HANDLE;
 bool g_bRoundStart = true;
 
+// Client Pref
+
+Handle g_hHumanClassCookie = INVALID_HANDLE;
+int g_iSelectedClass[MAXPLAYERS+1];
+int gZombieID[MAXPLAYERS+1];
+
 void FindClientDXLevel(int client)
 {
     if (IsFakeClient(client))

@@ -6,10 +6,6 @@
  * ====================
  */
 
-Handle g_hHumanClassCookie = INVALID_HANDLE;
-
-int g_iSelectedClass[MAXPLAYERS+1];
-
 void HumanClassInit()
 {
     RegConsoleCmd("zriot_class", Command_SelectHumanClass);

@@ -56,3 +56,17 @@ forward void ZRiot_OnClientHuman(int client);
  * @note   If hinttext is modified the new value will be sent to the client
  */
 forward void ZRiot_OnClientHUDUpdate(int client, char[] hinttext);
+
+/**
+ * Used to get player human class. (Cannot use for BOT)
+ * @param client   Client index.
+ * @return   Client Human Class index.
+ */
+native int ZRiot_GetClientHumanClass(int client);
+
+/**
+ * Used to get player zombie class. (Including with BOT)
+ * @param client   Client index.
+ * @return   Client Zombie Class index.
+ */
+native int ZRiot_GetClientZombieClasss(int client);

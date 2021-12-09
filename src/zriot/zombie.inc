@@ -9,8 +9,6 @@
 char skyname[32];
 char hostname[256];
 
-int gZombieID[MAXPLAYERS+1];
-
 void HookCommands()
 {
     RegConsoleCmd("nightvision", Command_NightVision);
