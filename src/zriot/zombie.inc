@@ -137,7 +137,12 @@ void HumansWin()
     
         ZRiot_PrintToChat(0, "Game won");
         
-        GotoNextMap();
+        bool instantchange = GetConVarBool(gCvars.CVAR_INSTANTMAPCHANGE);
+
+        if(instantchange)
+        {
+            GotoNextMap();
+        }
     }
     
     bool fade = GetConVarBool(gCvars.CVAR_ROUNDFADE);
