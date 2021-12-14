@@ -74,6 +74,11 @@ Handle g_hHumanClassCookie = INVALID_HANDLE;
 int g_iSelectedClass[MAXPLAYERS+1];
 int gZombieID[MAXPLAYERS+1];
 
+Handle g_hZombieVolume = INVALID_HANDLE;
+Handle g_hAmbienceVolume = INVALID_HANDLE;
+float g_fZombieVolume[MAXPLAYERS+1];
+float g_fAmbienceVolume[MAXPLAYERS+1];
+
 void FindClientDXLevel(int client)
 {
     if (IsFakeClient(client))

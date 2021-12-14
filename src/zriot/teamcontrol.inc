@@ -173,6 +173,11 @@ stock void AssignTeamClient(int client, bool spawn)
     {
         return;
     }
+
+    if(IsClientSourceTV(client))
+    {
+        return;
+    }
     
     int clients[1];
     clients[0] = client;

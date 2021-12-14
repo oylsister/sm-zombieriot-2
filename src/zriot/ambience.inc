@@ -91,6 +91,14 @@ void EmitAmbience(const char[] sound)
     
     StopAmbience();
     
-    float volume = GetConVarFloat(gCvars.CVAR_AMBIENCE_VOLUME);
-    EmitSoundToAll(sound, SOUND_FROM_PLAYER, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, volume, SNDPITCH_NORMAL, -1, NULL_VECTOR, NULL_VECTOR, true, 0.0);
+    //float volume = GetConVarFloat(gCvars.CVAR_AMBIENCE_VOLUME);
+    
+    for (int i = 1; i <= MaxClients; i++)
+    {
+        if(g_fAmbienceVolume[i] != 0.0)
+        {
+            float realvolume = g_fAmbienceVolume[i] / 100.0;
+            EmitSoundToClient(i, sound, SOUND_FROM_PLAYER, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, realvolume, SNDPITCH_NORMAL, -1, NULL_VECTOR, NULL_VECTOR, true, 0.0);
+        }
+    }
 }

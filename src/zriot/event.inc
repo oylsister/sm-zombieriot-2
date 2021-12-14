@@ -483,7 +483,15 @@ public Action PlayerHurt(Handle event, const char[] name, bool dontBroadcast)
             Format(sound, sizeof(sound), "zr/zombie_pain%d.mp3", randsound);
         
         PrecacheSound(sound);
-        EmitSoundToAll(sound, index);
+        
+        for (int i = 1; i <= MaxClients; i++)
+        {
+            if(g_fZombieVolume[i] != 0.0)
+            {
+                float realvolume = g_fZombieVolume[i] / 100.0;
+                EmitSoundToClient(i, sound, index, _, SNDLEVEL_NORMAL, _, realvolume);
+            }
+        }
     }
     
     bool napalm = GetConVarBool(gCvars.CVAR_NAPALM);
@@ -521,10 +529,18 @@ public Action PlayerDeath(Handle event, const char[] name, bool dontBroadcast)
             Format(sound, sizeof(sound), "npc/zombie/zombie_die%d.wav", randsound);
 		
         else
-            Format(sound, sizeof(sound), "sound/zr/zombie_die%d.wav", randsound);
+            Format(sound, sizeof(sound), "zr/zombie_die%d.mp3", randsound);
         
         PrecacheSound(sound);
-        EmitSoundToAll(sound, index);
+
+        for (int i = 1; i <= MaxClients; i++)
+        {
+            if(g_fZombieVolume[i] != 0.0)
+            {
+                float realvolume = g_fZombieVolume[i] / 100.0;
+                EmitSoundToClient(i, sound, index, _, SNDLEVEL_NORMAL, _, realvolume);
+            }
+        }
         
         int zombiecount = GetLiveZombieCount();
         int zombiemax = GetConVarInt(gCvars.CVAR_ZOMBIEMAX);

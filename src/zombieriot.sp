@@ -16,7 +16,7 @@
 #undef REQUIRE_PLUGIN
 #include <market>
 
-#define VERSION "2.2.0"
+#define VERSION "2.3.0"
 
 #pragma newdecls required
 
@@ -28,6 +28,7 @@ bool csgo = false;
 #include "zriot/translation"
 #include "zriot/offsets"
 #include "zriot/spawnprotect"
+#include "zriot/volumecontrol"
 #include "zriot/ambience"
 #include "zriot/zombiedata"
 #include "zriot/humandata"
@@ -93,6 +94,7 @@ public void OnPluginStart()
     InitTeamControl();
     InitWeaponRestrict();
     HumanClassInit();
+    VolumeControlInit();
     
     // ======================================================================
     
@@ -235,6 +237,7 @@ public void OnClientDisconnect(int client)
 public void OnClientCookiesCached(int client)
 {
     HumanClassOnCookiesCahced(client);
+    VolumeOnCookiesCached(client);
 }
 
 void MapChangeCleanup()
