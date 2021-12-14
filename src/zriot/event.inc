@@ -480,7 +480,7 @@ public Action PlayerHurt(Handle event, const char[] name, bool dontBroadcast)
             Format(sound, sizeof(sound), "npc/zombie/zombie_pain%d.wav", randsound);
         	
         else
-            Format(sound, sizeof(sound), "sound/zr/zombie_pain%d.wav", randsound);
+            Format(sound, sizeof(sound), "zr/zombie_pain%d.mp3", randsound);
         
         PrecacheSound(sound);
         EmitSoundToAll(sound, index);
