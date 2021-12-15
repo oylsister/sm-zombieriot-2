@@ -486,7 +486,7 @@ public Action PlayerHurt(Handle event, const char[] name, bool dontBroadcast)
         
         for (int i = 1; i <= MaxClients; i++)
         {
-            if(g_fZombieVolume[i] != 0.0)
+            if(IsClientInGame(i) && g_fZombieVolume[i] != 0.0)
             {
                 float realvolume = g_fZombieVolume[i] / 100.0;
                 EmitSoundToClient(i, sound, index, _, SNDLEVEL_NORMAL, _, realvolume);
@@ -535,7 +535,7 @@ public Action PlayerDeath(Handle event, const char[] name, bool dontBroadcast)
 
         for (int i = 1; i <= MaxClients; i++)
         {
-            if(g_fZombieVolume[i] != 0.0)
+            if(IsClientInGame(i) && g_fZombieVolume[i] != 0.0)
             {
                 float realvolume = g_fZombieVolume[i] / 100.0;
                 EmitSoundToClient(i, sound, index, _, SNDLEVEL_NORMAL, _, realvolume);
