@@ -14,4 +14,5 @@ Plugin update based on original: https://forums.alliedmods.net/showthread.php?p=
 - Spawn Protection
 - Dynamic Difficulty (Experimental)
 - Human Class (NEW)
+- Volume Control (NEW)
 - ~~Specific Max Human Player (New)~~ Removed
