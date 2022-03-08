@@ -1,0 +1,281 @@
+"Phrases"
+{
+	// ===========================
+	// Chat Messages
+	// ===========================
+
+	"Round objective"
+	{
+		"ru"		"Битва @greenлюдей против зомби@default, люди должны убить всех зомби, чтобы достичь следующего уровня."
+	}
+
+	"Feature is disabled"
+	{
+		"ru"		"Эта функция была отключена организатором сервера."
+	}
+
+	"Must be alive"
+	{
+		"ru"		"Можно использовать только когда жив."
+	}
+
+	"Must be dead"
+	{
+		"ru"		"Может использоваться только когда мёртв."
+	}
+
+	"!spawn reminder"
+	{
+		"ru"		"Напишите \"!spawn\" в чат, чтобы присоединиться к игре немедленно."
+	}
+
+	"!market reminder"
+	{
+		"ru"		"Напишите \"!market\" в чат, чтобы получить доступ к оружию, обычно недоступному для обеих команд."
+	}
+
+	"You are now a zombie"
+	{
+		"ru"		"Вы перешли на сторону зомби, ваша цель - убить людей."
+	}
+
+	"Game won"
+	{
+		"ru"		"Люди победили, раса зомби была уничтожена."
+	}
+
+	"Skip to day"
+	{
+		"#format"	"{1:d}"
+		"ru"		"Перепрыгиваем в день {1}"
+	}
+
+	"Respawn time"
+	{
+		"#format"	"{1:d}"
+		"ru"		"Возрождение через: {1} сек."
+	}
+
+	"Market out of buyzone"
+	{
+		"ru"		"Вы не в зоне покупок."
+	}
+
+	"Weapon has been restricted"
+	{
+		"#format"	"{1:s}"
+		"ru"		"Оружие @green\"{1}\" @defaultбыло запрещено."
+	}
+
+	"Weapon group has been restricted"
+	{
+		"#format"	"{1:s}"
+		"ru"		"Группа оружия @green\"{1}\" @defaultбыла запрещена."
+	}
+
+	"Weapon has been unrestricted"
+	{
+		"#format"	"{1:s}"
+		"ru"		"Оружие @green\"{1}\" @defaultбыло разрешено."
+	}
+
+	"Weapon group has been unrestricted"
+	{
+		"#format"	"{1:s}"
+		"ru"		"Группа оружия @green\"{1}\" @defaultбыла разрешена."
+	}
+
+	"Weapon is restricted"
+	{
+		"#format"	"{1:s}"
+		"ru"		"Оружие @green{1} @defaultзапрещено."
+	}
+
+	"Weapon already restricted"
+	{
+		"#format"	"{1:s}"
+		"ru"		"Оружие @green\"{1}\" @defaultуже запрещено."
+	}
+
+	"Weapon invalid"
+	{
+		"#format"	"{1:s}"
+		"ru"		"Оружие @green\"{1}\" @defaultнедействительно или запрещено."
+	}
+
+	"Zombie cant use weapon"
+	{
+		"ru"		"Зомби не могут использовать оружие!"
+	}
+
+	"Suicide text"
+	{
+		"ru"		"Хорошая попытка, нУУб!"
+	}
+
+	"DX90 not supported"
+	{
+		"#format"	"{1:d},{2:d}"
+		"ru"		"Блокировка оверлея - DX{1} обнаружен (DX{2} требуется)"
+	}
+	// ===========================
+	// Menus
+	// ===========================
+
+	"Market title"
+	{
+		"ru"		"Доступное оружие:"
+	}
+
+	"Market rebuy"
+	{
+		"ru"		"Купить снова"
+	}
+
+	// ===========================
+	// HudHints
+	// ===========================
+
+	"HUD"
+	{
+		"#format"	"{1:d},{2:d},{3:s},{4:d},{5:d}"
+		"ru"		"День {1}/{2} - {3}\nЗомби осталось: {4}\nЛюдей осталось: {5}\n "
+	}
+
+	"HUD target"
+	{
+		"#format"	"{1:d},{2:d},{3:s},{4:d},{5:d},{6:N},{7:d}"
+		"ru"		"День {1}/{2} - {3}\nЗомби осталось: {4}\nЛюдей осталось: {5}\nИгрок: {6} | Здоровье: {7}"
+	}
+
+	// ===========================
+	// Server Messages
+	// ===========================
+
+	"ZRiot"
+	{
+		"ru"		"ZRiot"
+	}
+
+	"Plugin loading"
+	{
+		"ru"		"-----------|         Zombie Riot загружается        |----------"
+	}
+
+	"Plugin loaded"
+	{
+		"ru"		"-----------|         Zombie Riot загружен         |----------"
+	}
+
+	"Hostname prefix"
+	{
+		"#format"	"{1:d},{2:d}"
+		"ru"		"[День ZRiot: {1}/{2}]"
+	}
+
+	"Restrict weapon mapstart"
+	{
+		"#format"	"{1:s}"
+		"ru"		"Запрещённое оружие: {1}"
+	}
+	
+	"Restrict weapon group mapstart"
+	{
+		"#format"	"{1:s}"
+		"ru"		"Запрещённые группы: {1}"
+	}
+
+	"Ambient sound load failed"
+	{
+		"#format"	"{1:s}"
+		"ru"		"Неверный звуковой файл: {1}"
+	}
+
+	"File load failed"
+	{
+		"#format"	"{1:s}"
+		"ru"		"Неверный путь к файлу: \"{1}\", проверьте downloads.txt"
+	}
+
+	// ===========================
+	// Spawn Protect
+	// ===========================
+
+	"Spawn Protect Timer"
+	{
+		"#format"	"{1:d}"
+		"ru"		"Защита при возрождении закончится через: {1} сек."
+	}
+
+	"Still Protected"
+	{
+		"ru"		"Теперь у вас есть защита при возрождении, бегите в безопасное место!"
+	}
+
+	"No Longer Protected"
+	{
+		"ru"		"Вы больше не защищены."
+	}
+
+	// ===========================
+	// Class Selection
+	// ===========================
+
+	"Human Menu"
+	{
+		"ru"		"[ZRiot] Выбор класса человека"
+	}
+
+	"Will apply on next spawn"
+	{
+		"ru"		"Выбранный вами класс будет применён при следующем возрождении."
+	}
+
+	"Class Reset To Default"
+	{
+		"ru"		"Выбранный вами класс был возвращён к классу по умолчанию."
+	}
+	
+	// ===========================
+	// Volume Control
+	// ===========================
+	
+	"Volume Menu"
+	{
+		"ru"		"[ZRiot] Регулятор громкости (!zvolume)"
+	}
+	
+	"Choice Zombie Volume"
+	{
+		"ru"		"Громкость голоса зомби"
+	}
+	
+	"Choice Ambient Volume"
+	{
+		"ru"		"Окружающая громкость"
+	}
+	
+	"Set Ambient Volume"
+	{
+		"#format"	"{1:d}"
+		"ru"		"Установлена громкость окружения: @green{1}"
+	}
+	
+	"Ambient Volume Menu"
+	{
+		"#format"	"{1:d}"
+		"ru"		"[ZRiot] Регулировка громкости окружения \nИспользование: !ambient_volume <0-100> Текущая громкость: {1}"
+	}
+	
+	"Set Zombie Volume"
+	{
+		"#format"	"{1:d}"
+		"ru"		"Установлена громкость зомби: @green{1}"
+	}
+	
+	"Zombie Volume Menu"
+	{
+		"#format"	"{1:d}"
+		"ru"		"[ZRiot] Регулировка громкости зомби \nИспользование: !zombie_volume <0-100> Текущая громкость: {1}"
+	}
+}

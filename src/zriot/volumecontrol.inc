@@ -147,13 +147,13 @@ public Action Ambient_Volume(int client, int args)
     if(volume < 0)
     {
         SaveVolumeCookie(client, Type_Ambience, 0.0);
-        ZRiot_ReplyToCommand(client, "Set Ambient Volume", 0.0);
+        ZRiot_ReplyToCommand(client, "Set Ambient Volume", 0);
         return Plugin_Handled;
     }
     else if(volume > 100)
     {
         SaveVolumeCookie(client, Type_Ambience, 100.0);
-        ZRiot_ReplyToCommand(client, "Set Ambient Volume", 100.0);
+        ZRiot_ReplyToCommand(client, "Set Ambient Volume", 100);
         return Plugin_Handled;
     }
     else
@@ -196,33 +196,34 @@ public int AmbientVolumeMenuHandler(Menu menu, MenuAction action, int param1, in
             if(StrEqual(info, "100", false))
             {
                 SaveVolumeCookie(param1, Type_Ambience, 100.0);
-                ZRiot_PrintToChat(param1, "Set Ambient Volume", 100.0);
+                ZRiot_PrintToChat(param1, "Set Ambient Volume", 100);
             }
             else if(StrEqual(info, "80", false))
             {
                 SaveVolumeCookie(param1, Type_Ambience, 80.0);
-                ZRiot_PrintToChat(param1, "Set Ambient Volume", 80.0);
+                ZRiot_PrintToChat(param1, "Set Ambient Volume", 80);
             }
             else if(StrEqual(info, "60", false))
             {
                 SaveVolumeCookie(param1, Type_Ambience, 60.0);
-                ZRiot_PrintToChat(param1, "Set Ambient Volume", 60.0);
+                ZRiot_PrintToChat(param1, "Set Ambient Volume", 60);
             }
             else if(StrEqual(info, "40", false))
             {
                 SaveVolumeCookie(param1, Type_Ambience, 40.0);
-                ZRiot_PrintToChat(param1, "Set Ambient Volume", 40.0);
+                ZRiot_PrintToChat(param1, "Set Ambient Volume", 40);
             }
             else if(StrEqual(info, "20", false))
             {
                 SaveVolumeCookie(param1, Type_Ambience, 20.0);
-                ZRiot_PrintToChat(param1, "Set Ambient Volume", 20.0);
+                ZRiot_PrintToChat(param1, "Set Ambient Volume", 20);
             }
             else
             {
                 SaveVolumeCookie(param1, Type_Ambience, 0.0);
-                ZRiot_PrintToChat(param1, "Set Ambient Volume", 0.0);
+                ZRiot_PrintToChat(param1, "Set Ambient Volume", 0);
             }
+            AmbientVolumeMenu(param1);
         }
         case MenuAction_Cancel:
         {
@@ -258,13 +259,13 @@ public Action Zombie_Volume(int client, int args)
     if(volume < 0)
     {
         SaveVolumeCookie(client, Type_Zombie, 0.0);
-        ZRiot_ReplyToCommand(client, "Set Zombie Volume", 0.0);
+        ZRiot_ReplyToCommand(client, "Set Zombie Volume", 0);
         return Plugin_Handled;
     }
     else if(volume > 100)
     {
         SaveVolumeCookie(client, Type_Zombie, 100.0);
-        ZRiot_ReplyToCommand(client, "Set Zombie Volume", 100.0);
+        ZRiot_ReplyToCommand(client, "Set Zombie Volume", 100);
         return Plugin_Handled;
     }
     else
@@ -307,33 +308,34 @@ public int ZombieVolumeMenuHandler(Menu menu, MenuAction action, int param1, int
             if(StrEqual(info, "100", false))
             {
                 SaveVolumeCookie(param1, Type_Zombie, 100.0);
-                ZRiot_PrintToChat(param1, "Set Zombie Volume", 100.0);
+                ZRiot_PrintToChat(param1, "Set Zombie Volume", 100);
             }
             else if(StrEqual(info, "80", false))
             {
                 SaveVolumeCookie(param1, Type_Zombie, 80.0);
-                ZRiot_PrintToChat(param1, "Set Zombie Volume", 80.0);
+                ZRiot_PrintToChat(param1, "Set Zombie Volume", 80);
             }
             else if(StrEqual(info, "60", false))
             {
                 SaveVolumeCookie(param1, Type_Zombie, 60.0);
-                ZRiot_PrintToChat(param1, "Set Zombie Volume", 60.0);
+                ZRiot_PrintToChat(param1, "Set Zombie Volume", 60);
             }
             else if(StrEqual(info, "40", false))
             {
                 SaveVolumeCookie(param1, Type_Zombie, 40.0);
-                ZRiot_PrintToChat(param1, "Set Zombie Volume", 40.0);
+                ZRiot_PrintToChat(param1, "Set Zombie Volume", 40);
             }
             else if(StrEqual(info, "20", false))
             {
                 SaveVolumeCookie(param1, Type_Zombie, 20.0);
-                ZRiot_PrintToChat(param1, "Set Zombie Volume", 20.0);
+                ZRiot_PrintToChat(param1, "Set Zombie Volume", 20);
             }
             else
             {
                 SaveVolumeCookie(param1, Type_Zombie, 0.0);
-                ZRiot_PrintToChat(param1, "Set Zombie Volume", 0.0);
+                ZRiot_PrintToChat(param1, "Set Zombie Volume", 0);
             }
+            ZombieVolumeMenu(param1);
         }
         case MenuAction_Cancel:
         {

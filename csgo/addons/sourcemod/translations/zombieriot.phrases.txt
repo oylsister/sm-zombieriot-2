@@ -235,4 +235,47 @@
 	{
 		"en"		"Your selected class has been reset back to Default class."
 	}
+	
+	// ===========================
+	// Volume Control
+	// ===========================
+	
+	"Volume Menu"
+	{
+		"en"		"[ZRiot] Volume Control (!zvolume)"
+	}
+	
+	"Choice Zombie Volume"
+	{
+		"en"		"Zombie Voice Volume"
+	}
+	
+	"Choice Ambient Volume"
+	{
+		"en"		"Ambient Volume"
+	}
+	
+	"Set Ambient Volume"
+	{
+		"#format"	"{1:d}"
+		"en"		"Set Ambient Volume to: @green{1}"
+	}
+	
+	"Ambient Volume Menu"
+	{
+		"#format"	"{1:d}"
+		"en"		"[ZRiot] Ambient Volume Control \nUsage: !ambient_volume <0-100> Current Volume: {1}"
+	}
+	
+	"Set Zombie Volume"
+	{
+		"#format"	"{1:d}"
+		"en"		"Set Zombie Volume to: @green{1}"
+	}
+	
+	"Zombie Volume Menu"
+	{
+		"#format"	"{1:d}"
+		"en"		"[ZRiot] Zombie Volume Control \nUsage: !zombie_volume <0-100> Current Volume: {1}"
+	}
 }
