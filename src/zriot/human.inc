@@ -103,7 +103,7 @@ void HumanClassOnCookiesCahced(int client)
 
     if(sBuffer[0] != '\0')
     {
-        g_iSelectedClass[client] = FindHumanIDByName(sBuffer);
+        g_iSelectedClass[client] = StringToInt(sBuffer);
     }
     else
     {
