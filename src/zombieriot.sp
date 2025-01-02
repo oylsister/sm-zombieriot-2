@@ -16,7 +16,7 @@
 #undef REQUIRE_PLUGIN
 #include <market>
 
-#define VERSION "2.3.2"
+#define VERSION "2.3.6"
 
 #pragma newdecls required
 
@@ -47,7 +47,7 @@ bool csgo = false;
 public Plugin myinfo =
 {
     name = "Zombie Riot", 
-    author = "Greyscale, Oylsister", 
+    author = "Greyscale, Oylsister, +SyntX", 
     description = "Humans stick together to fight off zombie attacks", 
     version = VERSION, 
     url = "https://github.com/oylsister/sm-zombieriot-2"
