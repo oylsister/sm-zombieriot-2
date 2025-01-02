@@ -9,6 +9,8 @@
 void HumanClassInit()
 {
     RegConsoleCmd("zriot_class", Command_SelectHumanClass);
+    
+    RegConsoleCmd("zclass", Command_SelectHumanClass);
 
     if(g_hHumanClassCookie == INVALID_HANDLE)
     {
