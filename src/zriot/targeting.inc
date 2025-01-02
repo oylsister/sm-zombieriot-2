@@ -12,25 +12,28 @@ bool bTargeted[MAXPLAYERS+1][MAXPLAYERS+1];
 
 void TargetPlayer(int attacker, int client)
 {
-    if (!IsClientInGame(attacker) || !IsClientInGame(client))
+    if (attacker <= 0 || client <= 0 || !IsClientInGame(attacker) || !IsClientInGame(client) || !IsPlayerAlive(client) || GetClientTeam(client) == CS_TEAM_SPECTATOR)
     {
         return;
     }
-    
+
     gTarget[attacker] = client;
-    
     bTargeted[client][attacker] = true;
 }
 
+
+
 int GetClientTarget(int client)
 {
-    if (gTarget[client] == -1 || !IsClientInGame(gTarget[client]))
+    if (client <= 0 || gTarget[client] == -1 || !IsClientInGame(client) || !IsPlayerAlive(client) || GetClientTeam(client) == CS_TEAM_SPECTATOR)
     {
         return -1;
     }
-    
+
     return gTarget[client];
 }
+
+
 
 int GetClientTargeters(int client, int[] clients, int maxClients)
 {
