@@ -33,7 +33,7 @@ void UpdateHUD(int[] clients, int numClients)
     
     for (int x = 0; x < numClients; x++)
     {
-        if (!IsClientInGame(clients[x]) || IsFakeClient(clients[x]) || GetClientTeam(clients[x]) == CS_TEAM_NONE)
+        if (clients[x] <= 0 || !IsClientInGame(clients[x]) || !IsPlayerAlive(clients[x]) || GetClientTeam(clients[x]) == CS_TEAM_NONE || GetClientTeam(clients[x]) == CS_TEAM_SPECTATOR)
         {
             continue;
         }
@@ -54,6 +54,8 @@ void UpdateHUD(int[] clients, int numClients)
         }
     }
 }
+
+
 
 stock void UpdateHUDClient(int client)
 {

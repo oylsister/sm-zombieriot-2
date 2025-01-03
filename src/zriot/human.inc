@@ -9,8 +9,9 @@
 void HumanClassInit()
 {
     RegConsoleCmd("zriot_class", Command_SelectHumanClass);
+    RegConsoleCmd("zclass", Command_SelectHumanClass);
 
-    if(g_hHumanClassCookie == INVALID_HANDLE)
+    if (g_hHumanClassCookie == INVALID_HANDLE)
     {
         g_hHumanClassCookie = RegClientCookie("zriot_humanclass", "[ZRiot] Human Class Cookies", CookieAccess_Protected);
     }
@@ -26,7 +27,8 @@ public void SelectClassMenu(int client)
 {
     Menu menu = new Menu(SelectClassMenuHandler, MENU_ACTIONS_ALL);
     menu.SetTitle("%t", "Human Menu");
-    for(int x = 0; x < hCount; x++)
+
+    for (int x = 0; x < hCount; x++)
     {
         char choice[256];
         Format(choice, sizeof(choice), "%s\n    %s", arrayHumans[x].human_name, arrayHumans[x].human_description);
@@ -40,7 +42,7 @@ public void SelectClassMenu(int client)
 
 public int SelectClassMenuHandler(Menu menu, MenuAction action, int param1, int param2)
 {
-    switch(action)
+    switch (action)
     {
         case MenuAction_DrawItem:
         {
@@ -49,10 +51,12 @@ public int SelectClassMenuHandler(Menu menu, MenuAction action, int param1, int 
 
             for (int x = 0; x < hCount; x++)
             {
-                if(StrEqual(info, arrayHumans[x].human_name, false))
+                if (StrEqual(info, arrayHumans[x].human_name, false))
                 {
                     int humanid = FindHumanIDByName(arrayHumans[x].human_name);
-                    if(g_iSelectedClass[param1] == humanid)
+
+                    // Prevent the currently selected class from being selected again
+                    if (g_iSelectedClass[param1] == humanid)
                     {
                         return ITEMDRAW_DISABLED;
                     }
@@ -61,11 +65,12 @@ public int SelectClassMenuHandler(Menu menu, MenuAction action, int param1, int 
                     sm_flags[0] = 0;
                     GetHumanAdminFlag(humanid, sm_flags, sizeof(sm_flags));
 
-                    if(strlen(sm_flags))
+                    if (strlen(sm_flags))
                     {
                         int flags = ReadFlagString(sm_flags);
 
-                        if(GetUserFlagBits(param1) & flags != flags)
+                        // Fix precedence for bitwise AND operation
+                        if ((GetUserFlagBits(param1) & flags) != flags)
                         {
                             return ITEMDRAW_DISABLED;
                         }
@@ -80,10 +85,11 @@ public int SelectClassMenuHandler(Menu menu, MenuAction action, int param1, int 
 
             for (int x = 0; x < hCount; x++)
             {
-                if(StrEqual(info, arrayHumans[x].human_name, false))
+                if (StrEqual(info, arrayHumans[x].human_name, false))
                 {
                     int humanid = FindHumanIDByName(arrayHumans[x].human_name);
                     SaveHumanClassCookie(param1, humanid);
+                    g_iSelectedClass[param1] = humanid; // Ensure selected class is updated
                     ZRiot_PrintToChat(param1, "Will apply on next spawn");
                 }
             }
@@ -96,12 +102,12 @@ public int SelectClassMenuHandler(Menu menu, MenuAction action, int param1, int 
     return 0;
 }
 
-void HumanClassOnCookiesCahced(int client)
+void HumanClassOnCookiesCached(int client)
 {
     char sBuffer[32];
     GetClientCookie(client, g_hHumanClassCookie, sBuffer, sizeof(sBuffer));
 
-    if(sBuffer[0] != '\0')
+    if (sBuffer[0] != '\0')
     {
         g_iSelectedClass[client] = StringToInt(sBuffer);
     }
@@ -131,12 +137,15 @@ public Action HumanSpawnPost(Handle timer, any client)
 
 void MakeHuman(int client, int humanid)
 {
-    ApplyHumanModel(client, humanid);
-    ApplyHumanArms(client, humanid);
-    ApplyHumanHealth(client, humanid);
-    ApplyHumanSpeed(client, humanid);
-    ApplyHumanGravity(client, humanid);
-    ApplyHumanFOV(client, humanid);
+    if (IsValidHumanID(humanid))
+    {
+        ApplyHumanModel(client, humanid);
+        ApplyHumanArms(client, humanid);
+        ApplyHumanHealth(client, humanid);
+        ApplyHumanSpeed(client, humanid);
+        ApplyHumanGravity(client, humanid);
+        ApplyHumanFOV(client, humanid);
+    }
 }
 
 void CheckAdminFlag(int client)
@@ -145,11 +154,12 @@ void CheckAdminFlag(int client)
     sm_flags[0] = 0;
     GetHumanAdminFlag(g_iSelectedClass[client], sm_flags, sizeof(sm_flags));
 
-    if(strlen(sm_flags))
+    if (strlen(sm_flags))
     {
         int flags = ReadFlagString(sm_flags);
 
-        if(GetUserFlagBits(client) & flags != flags)
+        // Fix precedence for bitwise AND operation
+        if ((GetUserFlagBits(client) & flags) != flags)
         {
             ResetClassToDefault(client);
         }
