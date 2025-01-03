@@ -16,7 +16,7 @@
 #undef REQUIRE_PLUGIN
 #include <market>
 
-#define VERSION "2.3.6"
+#define VERSION "2.3.7"
 
 #pragma newdecls required
 
@@ -234,7 +234,7 @@ public void OnClientDisconnect(int client)
 
 public void OnClientCookiesCached(int client)
 {
-    HumanClassOnCookiesCahced(client);
+    HumanClassOnCookiesCached(client);
     VolumeOnCookiesCached(client);
 }
 
