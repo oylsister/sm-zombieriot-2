@@ -119,59 +119,55 @@ int FindHumanIDByName(const char[] name)
 
 bool IsValidHumanID(int humanid)
 {
-    if(humanid > -1 && humanid < hCount)
-    {
-        return true;
-    }
-
-    return false;
+    return (humanid >= 0 && humanid < hCount);
 }
 
 void ApplyHumanModel(int client, int humanid)
 {
-    if(IsValidHumanID(humanid))
+    if (IsValidHumanID(humanid))
     {
         char model[256];
         strcopy(model, sizeof(model), arrayHumans[humanid].human_model);
 
-        if(!StrEqual(model, "default", false) || model[0] == '\0')
+        if (StrEqual(model, "default", false) || model[0] == '\0')
         {
-            PrecacheModel(model);
-            SetEntityModel(client, model);
+            return; // Skip default or invalid model
         }
+
+        PrecacheModel(model);
+        SetEntityModel(client, model);
     }
 }
 
 void ApplyHumanArms(int client, int humanid)
 {
-    if(!csgo)
+    if (!csgo || !IsValidHumanID(humanid))
     {
         return;
     }
 
-    if(IsValidHumanID(humanid))
+    char model[256];
+    strcopy(model, sizeof(model), arrayHumans[humanid].human_arms);
+
+    if (StrEqual(model, "default", false) || model[0] == '\0')
     {
-        char model[256];
-        strcopy(model, sizeof(model), arrayHumans[humanid].human_arms);
-
-        if(!StrEqual(model, "default", false) || model[0] == '\0')
-        {
-            PrecacheModel(model);
-
-            int arms = GetEntProp(client, Prop_Send, "m_hMyWearables");
-            if(arms != -1)
-            {
-                AcceptEntityInput(arms, "KillHierarchy");
-            }
-
-            SetEntPropString(client, Prop_Send, "m_szArmsModel", model);
-        }
+        return; // Skip default or invalid arms model
     }
+
+    PrecacheModel(model);
+
+    int arms = GetEntProp(client, Prop_Send, "m_hMyWearables");
+    if (arms != -1 && IsValidEntity(arms))
+    {
+        AcceptEntityInput(arms, "KillHierarchy");
+    }
+
+    SetEntPropString(client, Prop_Send, "m_szArmsModel", model);
 }
 
 void ApplyHumanHealth(int client, int humanid)
 {
-    if(IsValidHumanID(humanid))
+    if (IsValidHumanID(humanid))
     {
         SetEntityHealth(client, arrayHumans[humanid].human_health);
     }
@@ -179,7 +175,7 @@ void ApplyHumanHealth(int client, int humanid)
 
 void ApplyHumanSpeed(int client, int humanid)
 {
-    if(IsValidHumanID(humanid))
+    if (IsValidHumanID(humanid))
     {
         SetPlayerSpeed(client, arrayHumans[humanid].human_speed);
     }
@@ -187,7 +183,7 @@ void ApplyHumanSpeed(int client, int humanid)
 
 void ApplyHumanGravity(int client, int humanid)
 {
-    if(IsValidHumanID(humanid))
+    if (IsValidHumanID(humanid))
     {
         SetEntityGravity(client, arrayHumans[humanid].human_gravity);
     }
@@ -195,17 +191,16 @@ void ApplyHumanGravity(int client, int humanid)
 
 float GetHumanJump(int humanid)
 {
-    if(IsValidHumanID(humanid))
+    if (IsValidHumanID(humanid))
     {
         return arrayHumans[humanid].human_jump;
     }
-
     return 0.0;
 }
 
 void ApplyHumanFOV(int client, int humanid)
 {
-    if(IsValidHumanID(humanid))
+    if (IsValidHumanID(humanid))
     {
         SetPlayerFOV(client, arrayHumans[humanid].human_fov);
     }
@@ -215,7 +210,7 @@ int GetHumanDefaultClass(char[] name, int maxlen)
 {
     for (int x = 0; x < hCount; x++)
     {
-        if(arrayHumans[x].human_default)
+        if (arrayHumans[x].human_default)
         {
             return strcopy(name, maxlen, arrayHumans[x].human_name);
         }
@@ -246,4 +241,3 @@ bool GetEnableDataBool(const char[] text)
 
     return false;
 }
-
