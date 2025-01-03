@@ -174,5 +174,5 @@ void ResetClassToDefault(int client)
     g_iSelectedClass[client] = FindHumanIDByName(sDefault);
     SaveHumanClassCookie(client, g_iSelectedClass[client]);
 
-    ZRiot_PrintToChat(client, "Class Reset To Default.");
+    ZRiot_PrintToChat(client, "Class Reset To Default");
 }
