@@ -10,6 +10,7 @@ enum struct ZRiot_ZombieData
 {
     char data_name[32];
     char data_model[256];
+    char data_description[128];
     char data_zvision[256];
     bool data_override_required;
     int data_health;
@@ -111,6 +112,7 @@ void LoadZombieData(bool defaultconfig)
         arrayZombies[zCount].data_jump = KvGetFloat(kvZombies, "jump", 1.0);
         
         arrayZombies[zCount].data_fov = KvGetNum(kvZombies, "fov", 90);
+        
         
         zCount++;
     } while (KvGotoNextKey(kvZombies));

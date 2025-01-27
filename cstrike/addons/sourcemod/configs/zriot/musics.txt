@@ -1,0 +1,13 @@
+"Musics"
+{
+    "1"
+    {
+        "name" "<name>"
+        "path" "<path_to_the_music>"
+    }
+    "2"
+    {
+        "name" "<name>"
+        "path" "<path_to_the_music>"
+    }
+}

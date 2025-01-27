@@ -89,6 +89,8 @@ public Action PlayerDisconnect(Handle event, const char[] name, bool dontBroadca
     
     if (!index || !IsClientInGame(index))
         return Plugin_Continue;
+
+    g_bStopHearingMusic[index] = false;
     
     if (pdFire && IsFakeClient(index))
     {
@@ -121,13 +123,13 @@ public void RoundStart(Handle event, const char[] name, bool dontBroadcast)
 {
     bool dynamic = GetConVarBool(gCvars.CVAR_DYNAMIC_ENABLE);
 
-    if(dynamic)
+    if (dynamic)
     {
         int humancount = 0;
 
-        for(int x = 1; x <= MaxClients; x++)
+        for (int x = 1; x <= MaxClients; x++)
         {
-            if(IsPlayerAlive(x) && IsPlayerHuman(x))
+            if (IsPlayerAlive(x) && IsPlayerHuman(x))
             {
                 humancount++;
             }
@@ -136,60 +138,62 @@ public void RoundStart(Handle event, const char[] name, bool dontBroadcast)
         float player_ratio = GetConVarFloat(gCvars.CVAR_DYNAMIC_PLAYERRATIO);
         g_activeratio = RoundToNearest(view_as<float>(humancount) / player_ratio);
 
-        if(g_activeratio <= 0)
+        if (g_activeratio <= 0)
         {
             g_activeratio = 1;
         }
     }
-    
+
     UpdateHostname();
-    
     ChangeLightStyle();
-    
     RestartAmbience();
-    
+    StartCountdown();
+
+    // Play Music on Round Start
+    PlayMusic(); // Use the previously defined PlayMusic() function
+
     ServerCommand("bot_knives_only");
 
-    if(g_bTriggerMapVote)
+    if (g_bTriggerMapVote)
     {
-        if(!g_bAlreadyVoted)
+        if (!g_bAlreadyVoted)
         {
             g_iDayleft = dCount - (gDay + 1);
 
-            if(g_iDayleft == g_iDayMapvote)
+            if (g_iDayleft == g_iDayMapvote)
             {
                 ServerCommand("sm_mapvote");
                 g_bAlreadyVoted = true;
             }
         }
     }
-    
+
     char storyline[192];
     GetDayStoryLine(gDay, storyline, sizeof(storyline));
-    
+
     if (storyline[0])
     {
         FormatTextString(storyline, sizeof(storyline));
-    
+
         PrintToChatAll(storyline);
     }
-    
+
     BeginDay();
-    
+
     if (tHUD != INVALID_HANDLE)
     {
         CloseHandle(tHUD);
         tHUD = INVALID_HANDLE;
     }
-    
+
     bool hud = GetConVarBool(gCvars.CVAR_HUD);
     if (hud)
     {
-        tHUD = CreateTimer(5.0, HUD, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
-        
+        tHUD = CreateTimer(5.0, HUD, _, TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE);
+
         UpdateHUDAll();
     }
-    
+
     if (tFreeze != INVALID_HANDLE)
     {
         CloseHandle(tFreeze);
@@ -229,15 +233,15 @@ public void RoundEnd(Handle event, const char[] name, bool dontBroadcast)
 {
     ResetZombies(false);
     ClearTrie(trieDeaths);
-    
+
     CreateTimer(0.0, AssignTeamTimer);
-    
+
     int reason = GetEventInt(event, "reason");
-    
+
     if (reason == CTs_Win || reason == Terrorists_Win)
     {
         int winner = GetEventInt(event, "winner");
-        
+
         if (winner == gZombieTeam)
         {
             ZombiesWin();
@@ -252,12 +256,14 @@ public void RoundEnd(Handle event, const char[] name, bool dontBroadcast)
         RoundDraw();
     }
 
+    StopMusic();
+
     if (tHUD != INVALID_HANDLE)
     {
         CloseHandle(tHUD);
         tHUD = INVALID_HANDLE;
     }
-    
+
     if (tFreeze != INVALID_HANDLE)
     {
         CloseHandle(tFreeze);

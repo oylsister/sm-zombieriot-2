@@ -16,7 +16,7 @@
 #undef REQUIRE_PLUGIN
 #include <market>
 
-#define VERSION "2.3.7"
+#define VERSION "2.3.8"
 
 #pragma newdecls required
 
@@ -43,6 +43,8 @@ bool csgo = false;
 #include "zriot/weaponrestrict"
 #include "zriot/commands"
 #include "zriot/event"
+#include "zriot/musics"
+#include "zriot/countdown"
 
 public Plugin myinfo =
 {
@@ -50,7 +52,7 @@ public Plugin myinfo =
     author = "Greyscale, Oylsister, +SyntX", 
     description = "Humans stick together to fight off zombie attacks", 
     version = VERSION, 
-    url = "https://github.com/oylsister/sm-zombieriot-2"
+    url = "https://github.com/SyntX34"
 };
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
@@ -95,6 +97,7 @@ public void OnPluginStart()
     InitWeaponRestrict();
     HumanClassInit();
     VolumeControlInit();
+    MusicCommandInit();
     
     // ======================================================================
     
@@ -154,6 +157,8 @@ public void OnMapStart()
     LoadZombieData(true);
     LoadDayData(true);
     LoadHumanData(true);
+    LoadMusicData(true);
+    ResetMusic();
     
     FindMapSky();
     

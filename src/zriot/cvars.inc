@@ -49,6 +49,10 @@ enum struct ZRiotSettings
     Handle CVAR_DYNAMIC_PLAYERRATIO;
     Handle CVAR_ALLOWHUMAN_RESPAWN;
     Handle CVAR_DAYS_POSITION;
+    Handle CVAR_MUSICS;
+    Handle CVAR_MUSICS_MODE;
+    Handle CVAR_COUNTDOWN;
+    Handle CVAR_COUNTDOWN_SOUND;
 }
 
 ZRiotSettings gCvars;
@@ -96,7 +100,11 @@ void CreateCvars()
     gCvars.CVAR_DYNAMIC_PLAYERRATIO   =    CreateConVar("zriot_dynamic_playerratio", "10.0", "Every n player the zombie will get buffed");
     gCvars.CVAR_ALLOWHUMAN_RESPAWN    =    CreateConVar("zriot_allowhuman_respawn", "1.0", "Allow Human To Respawn in that map or not.");
     gCvars.CVAR_DAYS_POSITION         =    CreateConVar("zriot_days_position", "1", "The position of days in the hostname, 1 = After the hostname, 2 = Before the hostname.");
-    
+    gCvars.CVAR_MUSICS                =    CreateConVar("zriot_enable_musics", "1", "Enable Musics? [1 = Enable, 0 = Disable]");
+    gCvars.CVAR_MUSICS_MODE           =    CreateConVar("zriot_musics_mode", "1", "Music Mode [0 = From 1 to ~, 1 = Random]");
+    gCvars.CVAR_COUNTDOWN             =    CreateConVar("zriot_zombie_countdown","1", "Countdown Hud [Dependency: zriot_freeze ]");
+    gCvars.CVAR_COUNTDOWN_SOUND       =    CreateConVar("zriot_zombie_countdown_sound", "1", "Countdown Sound [Dependency: zriot_freeze && zriot_zombie_countdown ]");
+
     HookConVarChange(gCvars.CVAR_ENABLE, EnableHook);
 
     HookConVarChange(gCvars.CVAR_ALLOWHUMAN_RESPAWN, OnHumanRespawnChanged);
