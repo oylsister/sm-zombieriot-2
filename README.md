@@ -1,7 +1,10 @@
 # About me
 Steam: https://steamcommunity.com/id/SyntX34
+
 Discord: nh_syntx (SyntX#0164)
+
 YouTube - https://www.youtube.com/@syntxgaming7208
+
 Discord Server - https://discord.gg/2DjsQ4xdd5
 
 # sm-zombieriot-2
