@@ -235,4 +235,101 @@
 	{
 		"ru"		"Выбранный вами класс был возвращён к классу по умолчанию."
 	}
+
+	"Currently playing: %s"
+	{
+		"#format"   "{1:s}"
+		"ru"        "Сейчас играет: @green{1}"
+	}
+
+	"Volume Menu"
+	{
+		"ru"        "Меню громкости"
+	}
+
+	"Choice Zombie Volume"
+	{
+		"ru"        "Меню громкости зомби"
+	}
+
+	"Choice Music Volume"
+	{
+		"ru"        "Меню громкости музыки"
+	}
+
+	"Choice Ambient Volume"
+	{
+		"ru"        "Меню громкости окружающих звуков"
+	}
+
+	"Music Volume Menu"
+	{
+		"ru"        "Меню громкости музыки"
+	}
+
+	"Zombie Volume Menu"
+	{
+		"ru"        "Меню громкости зомби"
+	}
+
+	"Ambient Volume Menu"
+	{
+		"ru"        "Меню громкости окружающих звуков"
+	}
+
+	"EnableHearingMusic"
+	{
+		"ru"        "Остановить прослушивание музыки [Включено]"
+	}
+
+	"DisableHearingMusic"
+	{
+		"ru"        "Остановить прослушивание музыки [Отключено]"
+	}
+
+	"DisablePlayingMusic"
+	{
+		"ru"        "Остановить воспроизведение музыки [Отключено]"
+	}
+
+	"EnablePlayingMusic"
+	{
+		"ru"        "Остановить воспроизведение музыки [Включено]"
+	}
+
+	"Set Music Volume"
+	{
+		"ru"        "Установить громкость музыки"
+	}
+
+	"Set Zombie Volume"
+	{
+		"ru"        "Установить громкость зомби"
+	}
+
+	"Set Ambient Volume"
+	{
+		"ru"        "Установить громкость окружающих звуков"
+	}
+
+	"Music is now enabled for you."
+	{
+		"ru"        "@greenМузыка снова включена для вас."
+	}
+
+	"Music has been stopped for you."
+	{
+		"ru"        "@greenМузыка была остановлена для вас."
+	}
+
+	"Disabled Music"
+	{
+		"ru"        "Вы отключили музыку. Используйте !stopmusic, чтобы снова включить её."
+	}
+
+	"Now Playing"
+	{
+		"ru"        "Музыка сейчас воспроизводится."
+	}
+
 }
