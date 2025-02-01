@@ -5,6 +5,7 @@
  *   Author: Greyscale
  * ====================
  */
+bool g_bMusicPlaying = false;
 
 void GetMapVoteConVars()
 {
@@ -148,9 +149,8 @@ public void RoundStart(Handle event, const char[] name, bool dontBroadcast)
     ChangeLightStyle();
     RestartAmbience();
     StartCountdown();
-
-    // Play Music on Round Start
-    PlayMusic(); // Use the previously defined PlayMusic() function
+    g_bMusicPlaying = false;
+    PlayMusic();
 
     ServerCommand("bot_knives_only");
 
@@ -256,7 +256,7 @@ public void RoundEnd(Handle event, const char[] name, bool dontBroadcast)
         RoundDraw();
     }
 
-    StopMusic();
+    StopMusicForAll();
 
     if (tHUD != INVALID_HANDLE)
     {

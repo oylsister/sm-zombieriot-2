@@ -1,6 +1,7 @@
 #define MAX_MUSICS 100
 #define MAX_PATH_LENGTH PLATFORM_MAX_PATH
 #define MAX_CLIENTS 64
+#define MAX_NAME_LENGTH 64
 
 Handle kvMusics = INVALID_HANDLE;
 
@@ -8,6 +9,7 @@ char arrayMusics[MAX_MUSICS][MAX_NAME_LENGTH];
 char arrayMusicPaths[MAX_MUSICS][MAX_PATH_LENGTH];
 int mCount = 0;
 int sequentialIndex = 0;
+char g_sCurrentMusicName[MAX_NAME_LENGTH]
 
 void MusicCommandInit()
 {
@@ -56,7 +58,6 @@ void LoadMusicData(bool defaultconfig)
         KvGetString(kvMusics, "path", musicpath, sizeof(musicpath));
         strcopy(arrayMusicPaths[mCount], MAX_PATH_LENGTH, musicpath);
 
-        // Precache the sound directly from the specified path
         PrecacheSound(musicpath, true);
 
         char downloadPath[MAX_PATH_LENGTH];
@@ -75,63 +76,76 @@ void LoadMusicData(bool defaultconfig)
 
 void PlayMusic()
 {
-    if (GetConVarInt(gCvars.CVAR_MUSICS) != 1 || mCount <= 0)
+    PrintToServer("PlayMusic() called. g_bMusicPlaying: %d, CVAR_MUSICS: %d, mCount: %d", g_bMusicPlaying, GetConVarInt(gCvars.CVAR_MUSICS), mCount);
+
+    if (g_bMusicPlaying || GetConVarInt(gCvars.CVAR_MUSICS) != 1 || mCount <= 0)
     {
+        PrintToServer("PlayMusic() skipped: g_bMusicPlaying: %d, CVAR_MUSICS: %d, mCount: %d", g_bMusicPlaying, GetConVarInt(gCvars.CVAR_MUSICS), mCount);
         return;
     }
 
-    char currentMusicName[MAX_NAME_LENGTH];
+    g_bMusicPlaying = true;
+
+    int randomIndex = (GetConVarInt(gCvars.CVAR_MUSICS_MODE) == 1) ? GetRandomInt(0, mCount - 1) : sequentialIndex++;
+    if (sequentialIndex >= mCount) sequentialIndex = 0;
+
     char currentMusicPath[MAX_PATH_LENGTH];
-
-    int randomIndex = -1;
-
-    if (GetConVarInt(gCvars.CVAR_MUSICS_MODE) == 1)
-    {
-        randomIndex = GetRandomInt(0, mCount - 1);
-    }
-    else
-    {
-        randomIndex = sequentialIndex;
-        sequentialIndex++;
-        if (sequentialIndex >= mCount)
-        {
-            sequentialIndex = 0;
-        }
-    }
-
-    strcopy(currentMusicName, MAX_NAME_LENGTH, arrayMusics[randomIndex]);
     strcopy(currentMusicPath, MAX_PATH_LENGTH, arrayMusicPaths[randomIndex]);
-
+    strcopy(g_sCurrentMusicName, MAX_NAME_LENGTH, arrayMusics[randomIndex]); // Store the current music name
     PrecacheSound(currentMusicPath, true);
 
-    char downloadPath[MAX_PATH_LENGTH];
-    Format(downloadPath, sizeof(downloadPath), "sound/%s", currentMusicPath);
-    AddFileToDownloadsTable(downloadPath);
+    PrintToServer("Playing music: %s", g_sCurrentMusicName);
 
-    // Play the music to all clients who haven't stopped it
+    // Play the music for all eligible clients
     for (int i = 1; i <= MaxClients; i++)
     {
-        if (IsClientInGame(i) && !IsFakeClient(i) && !g_bStopHearingMusic[i])
+        if (IsClientInGame(i) && !IsFakeClient(i) && g_bMusicEnabled[i])
         {
             EmitSoundToClient(i, currentMusicPath);
-            ZRiot_PrintToChat(i, "Currently playing: %s", currentMusicName);
-        }
-        else if (IsClientInGame(i) && !IsFakeClient(i) && g_bStopHearingMusic[i])
-        {
-            ZRiot_PrintToChat(i, "Music is currently stopped for you.");
+            CPrintToChat(i, "{fullred}[ZombieRiot] Now playing: {green}%s", g_sCurrentMusicName); // Notify the client
         }
     }
 }
 
-void StopMusic()
+public Action Command_PlayMusic(int client, int args)
 {
-    for (int i = 1; i <= MaxClients; i++)
+    if (IsClientInGame(client) && !IsFakeClient(client))
     {
-        if (IsClientInGame(i) && !IsFakeClient(i))
+        if (GetConVarInt(gCvars.CVAR_MUSICS) == 0)
         {
-            EmitSoundToClient(i, ""); // Stop any music currently playing for the client
-            PrintToChat(i, "Music has been stopped.");
+            CPrintToChat(client, "{fullred}[ZombieRiot] Music is disabled for this server.");
+            return Plugin_Handled;
         }
+
+        if (!g_bMusicEnabled[client])
+        {
+            g_bMusicEnabled[client] = true;
+            CPrintToChat(client, "{fullred}[ZombieRiot] Music has been enabled for you.");
+            if (g_bMusicPlaying)
+            {
+                CPrintToChat(client, "{fullred}[ZombieRiot] Now playing: {green}%s", g_sCurrentMusicName); // Show the current music
+                PlayMusicForClient(client);
+            }
+        }
+        else
+        {
+            CPrintToChat(client, "{fullred}[ZombieRiot] Music is already enabled for you.");
+            if (g_bMusicPlaying)
+            {
+                CPrintToChat(client, "{fullred}[ZombieRiot] Now playing: {green}%s", g_sCurrentMusicName); // Show the current music
+            }
+        }
+    }
+    return Plugin_Handled;
+}
+
+void PlayMusicForClient(int client)
+{
+    if (g_bMusicPlaying && IsClientInGame(client) && !IsFakeClient(client) && g_bMusicEnabled[client])
+    {
+        char currentMusicPath[MAX_PATH_LENGTH];
+        strcopy(currentMusicPath, MAX_PATH_LENGTH, arrayMusicPaths[sequentialIndex]);
+        EmitSoundToClient(client, currentMusicPath);
     }
 }
 
@@ -139,43 +153,48 @@ public Action Command_StopMusic(int client, int args)
 {
     if (IsClientInGame(client) && !IsFakeClient(client))
     {
-        if (!g_bStopHearingMusic[client])
-        {
-            // Stop music for this client
-            g_bStopHearingMusic[client] = true;
-            EmitSoundToClient(client, ""); // Stop any currently playing sound for the client
-            ZRiot_PrintToChat(client, "Music has been stopped for you.");
-        }
-        else
-        {
-            // Re-enable music for this client
-            g_bStopHearingMusic[client] = false;
-            ZRiot_PrintToChat(client, "Music is now enabled for you.");
-        }
+        g_bMusicEnabled[client] = false;
+        StopMusicForClient(client);
+        CPrintToChat(client, "{fullred}[ZombieRiot] Music has been stopped for you.");
     }
-
     return Plugin_Handled;
 }
 
-public Action Command_PlayMusic(int client, int args)
+void StopMusicForClient(int client)
 {
-    if (IsClientInGame(client) && !IsFakeClient(client) && !g_bStopHearingMusic[client])
+    if (IsClientInGame(client) && !IsFakeClient(client))
     {
-        PlayMusic();
-        ZRiot_PrintToChat(client, "Now Playing");
+        // Stop the sound immediately
+        EmitSoundToClient(client, "", SOUND_FROM_PLAYER, SNDCHAN_AUTO, SNDLEVEL_NONE, SND_STOP, 0.0);
     }
-    else if (g_bStopHearingMusic[client])
-    {
-        ZRiot_PrintToChat(client, "Disabled Music");
-    }
+}
 
-    return Plugin_Handled;
+void StopMusicForAll()
+{
+    g_bMusicPlaying = false;
+    for (int i = 1; i <= MaxClients; i++)
+    {
+        if (IsClientInGame(i) && !IsFakeClient(i))
+        {
+            EmitSoundToClient(i, "", SOUND_FROM_PLAYER, SNDCHAN_AUTO, SNDLEVEL_NONE, SND_STOP, 0.0);
+        }
+    }
 }
 
 void ResetMusic()
 {
+    g_bMusicPlaying = false;
     for (int i = 1; i <= MaxClients; i++)
     {
-        g_bStopHearingMusic[i] = false;
+        g_bMusicEnabled[i] = true; // Enable music by default for everyone
     }
+}
+
+public Action Timer_PlayMusicOnJoin(Handle timer, any client)
+{
+    if (IsClientInGame(client) && !IsFakeClient(client) && g_bMusicEnabled[client])
+    {
+        PlayMusicForClient(client);
+    }
+    return Plugin_Stop;
 }

@@ -18,6 +18,8 @@ float g_fMusicVolume[MAXPLAYERS + 1];
 bool g_bStopHearingMusic[MAXPLAYERS + 1];
 bool g_bStopPlayingMusic[MAXPLAYERS + 1];
 Handle g_hStopMusic;
+bool g_bMusicEnabled[MAXPLAYERS + 1] = { true };
+bool g_hMusicEnabled = true; 
 
 
 void VolumeControlInit()
@@ -125,32 +127,30 @@ public Action Command_Volume(int client, int args)
 
 public void VolumeTypeMenu(int client)
 {
-    PrintToServer("VolumeTypeMenu triggered for client %d", client); // Debug message
     Menu menu = new Menu(VolumeTypeMenuHandler, MENU_ACTIONS_ALL);
     menu.SetTitle("%t", "Volume Menu");
     
     char zombie[64];
     char ambient[64];
     char music[64];
+    char zmusic[64];
 
     Format(zombie, sizeof(zombie), "%t", "Choice Zombie Volume");
     Format(ambient, sizeof(ambient), "%t", "Choice Ambient Volume");
     Format(music, sizeof(music), "%t", "Choice Music Volume");
+    Format(zmusic, sizeof(zmusic), "%t", "Toggle Music");
 
     menu.AddItem("zombie", zombie);
     menu.AddItem("ambient", ambient);
     menu.AddItem("music", music);
+    menu.AddItem("zmusic", zmusic);
 
     menu.ExitButton = true;
     menu.Display(client, MENU_TIME_FOREVER);
-
-    // Debug message to confirm menu display
-    PrintToServer("VolumeTypeMenu displayed for client %d", client); // Debug message
 }
 
 public int VolumeTypeMenuHandler(Menu menu, MenuAction action, int param1, int param2)
 {
-    PrintToServer("VolumeTypeMenuHandler triggered for client %d with action %d", param1, action); // Debug message
     switch(action)
     {
         case MenuAction_Select:
@@ -166,7 +166,7 @@ public int VolumeTypeMenuHandler(Menu menu, MenuAction action, int param1, int p
             {
                 AmbientVolumeMenu(param1);
             }
-            else
+            else if (StrEqual(info, "music", false))
             {
                 MusicVolumeMenu(param1);
             }

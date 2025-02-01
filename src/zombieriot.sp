@@ -12,6 +12,7 @@
 #include <sdkhooks>
 #include <cstrike>
 #include <clientprefs>
+#include <multicolors>
 
 #undef REQUIRE_PLUGIN
 #include <market>
@@ -211,6 +212,11 @@ public void OnClientPutInServer(int client)
     ClientHookUse(client);
     
     FindClientDXLevel(client);
+
+    if (!IsFakeClient(client) && GetConVarInt(gCvars.CVAR_MUSICS) == 1 && g_bMusicEnabled[client])
+    {
+        CreateTimer(2.0, Timer_PlayMusicOnJoin, client);
+    }
 }
 
 public void OnClientDisconnect(int client)
